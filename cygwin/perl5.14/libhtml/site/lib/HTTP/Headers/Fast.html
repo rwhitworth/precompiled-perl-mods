@@ -1,0 +1,180 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>HTTP::Headers::Fast - faster implementation of HTTP::Headers</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;HTTP::Headers::Fast - faster implementation of HTTP::Headers</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#why_yet_another_one">WHY YET ANOTHER ONE?</a></li>
+	<li><a href="#additional_methods">ADDITIONAL METHODS</a></li>
+	<li><a href="#_isa_hack">@ISA HACK</a></li>
+	<li><a href="#benchmark">BENCHMARK</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#thanks_to">THANKS TO</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#license">LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>HTTP::Headers::Fast - faster implementation of HTTP::Headers</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use HTTP::Headers::Fast;
+  # and, same as HTTP::Headers.</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>HTTP::Headers::Fast is a perl class for parsing/writing HTTP headers.</p>
+<p>The interface is same as HTTP::Headers.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="why_yet_another_one">WHY YET ANOTHER ONE?</a></h1>
+<p>HTTP::Headers is a very good. But I needed a faster implementation, fast  =)</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="additional_methods">ADDITIONAL METHODS</a></h1>
+<dl>
+<dt><strong><a name="as_string_without_sort" class="item">as_string_without_sort</a></strong></dt>
+
+<dd>
+<p>as_string method sorts the header names.But, sorting is bit slow.</p>
+<p>In this method, stringify the instance of HTTP::Headers::Fast without sorting.</p>
+</dd>
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="_isa_hack">@ISA HACK</a></h1>
+<p>If you want HTTP::Headers::Fast to pretend like it's really HTTP::Headers, you can try the following hack:</p>
+<pre>
+    unshift @HTTP::Headers::Fast::ISA, 'HTTP::Headers';</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="benchmark">BENCHMARK</a></h1>
+<pre>
+    HTTP::Headers 5.818, HTTP::Headers::Fast 0.01</pre>
+<pre>
+    -- push_header
+            Rate orig fast
+    orig 144928/s   -- -20%
+    fast 181818/s  25%   --</pre>
+<pre>
+    -- push_header_many
+            Rate orig fast
+    orig 74627/s   -- -16%
+    fast 89286/s  20%   --</pre>
+<pre>
+    -- get_date
+            Rate orig fast
+    orig 34884/s   -- -14%
+    fast 40541/s  16%   --</pre>
+<pre>
+    -- set_date
+            Rate orig fast
+    orig 21505/s   -- -19%
+    fast 26525/s  23%   --</pre>
+<pre>
+    -- scan
+            Rate orig fast
+    orig 57471/s   --  -1%
+    fast 57803/s   1%   --</pre>
+<pre>
+    -- get_header
+            Rate orig fast
+    orig 120337/s   -- -24%
+    fast 157729/s  31%   --</pre>
+<pre>
+    -- set_header
+            Rate orig fast
+    orig  79745/s   -- -30%
+    fast 113766/s  43%   --</pre>
+<pre>
+    -- get_content_length
+            Rate orig fast
+    orig 182482/s   -- -77%
+    fast 793651/s 335%   --</pre>
+<pre>
+    -- as_string
+            Rate orig fast
+    orig 23753/s   -- -41%
+    fast 40161/s  69%   --</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<pre>
+    Tokuhiro Matsuno E&lt;lt&gt;tokuhirom@gmail.comE&lt;gt&gt;
+    Daisuke Maki</pre>
+<p>And HTTP::Headers' originally written by Gisle Aas.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="thanks_to">THANKS TO</a></h1>
+<p>Markstos</p>
+<p>Tatsuhiko Miyagawa</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../HTTP/Headers.html">the HTTP::Headers manpage</a></p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;HTTP::Headers::Fast - faster implementation of HTTP::Headers</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

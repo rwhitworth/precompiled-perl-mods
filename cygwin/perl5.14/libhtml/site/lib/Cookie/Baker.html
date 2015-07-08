@@ -1,0 +1,173 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>Cookie::Baker - Cookie string generator / parser</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Cookie::Baker - Cookie string generator / parser</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#xs_implementation">XS IMPLEMENTATION</a></li>
+	<li><a href="#function">FUNCTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>Cookie::Baker - Cookie string generator / parser</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use Cookie::Baker;</pre>
+<pre>
+    $headers-&gt;push_header('Set-Cookie', bake_cookie($key,$val));</pre>
+<pre>
+    my $cookies_hashref = crush_cookie($headers-&gt;header('Cookie'));</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Cookie::Baker provides simple cookie string generator and parser.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="xs_implementation">XS IMPLEMENTATION</a></h1>
+<p>This module tries to use <a href="../lib/perl5/site_perl/5.14/x86_64-cygwin-threads/Cookie/Baker/XS.html">the Cookie::Baker::XS manpage</a>'s crush_cookie by default.
+If this fails, it will use Cookie::Baker's pure Perl crush_cookie.</p>
+<p>There is no XS implementation of bake_cookie yet.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="function">FUNCTION</a></h1>
+<dl>
+<dt><strong><a name="bake_cookie" class="item">bake_cookie</a></strong></dt>
+
+<dd>
+<pre>
+  my $cookie = bake_cookie('foo','val');
+  my $cookie = bake_cookie('foo', {
+      value =&gt; 'val',
+      path =&gt; &quot;test&quot;,
+      domain =&gt; '.example.com',
+      expires =&gt; '+24h'
+  } );</pre>
+<p>Generates a cookie string for an HTTP response header.
+The first argument is the cookie's name and the second argument is a plain string or hash reference that
+can contain keys such as <a href="#value"><code>value</code></a>, <a href="#domain"><code>domain</code></a>, <a href="#expires"><code>expires</code></a>, <a href="#path"><code>path</code></a>, <a href="#httponly"><code>httponly</code></a>, <a href="#secure"><code>secure</code></a>,
+<code>max-age</code>.</p>
+<dl>
+<dt><strong><a name="value" class="item">value</a></strong></dt>
+
+<dd>
+<p>Cookie's value</p>
+</dd>
+<dt><strong><a name="domain" class="item">domain</a></strong></dt>
+
+<dd>
+<p>Cookie's domain.</p>
+</dd>
+<dt><strong><a name="expires" class="item">expires</a></strong></dt>
+
+<dd>
+<p>Cookie's expires date time. Several formats are supported</p>
+<pre>
+  expires =&gt; time + 24 * 60 * 60 # epoch time
+  expires =&gt; 'Wed, 03-Nov-2010 20:54:16 GMT' 
+  expires =&gt; '+30s' # 30 seconds from now
+  expires =&gt; '+10m' # ten minutes from now
+  expires =&gt; '+1h'  # one hour from now 
+  expires =&gt; '-1d'  # yesterday (i.e. &quot;ASAP!&quot;)
+  expires =&gt; '+3M'  # in three months
+  expires =&gt; '+10y' # in ten years time
+  expires =&gt; 'now'  #immediately</pre>
+</dd>
+<dt><strong><a name="path" class="item">path</a></strong></dt>
+
+<dd>
+<p>Cookie's path.</p>
+</dd>
+<dt><strong><a name="httponly" class="item">httponly</a></strong></dt>
+
+<dd>
+<p>If true, sets HttpOnly flag. false by default.</p>
+</dd>
+<dt><strong><a name="secure" class="item">secure</a></strong></dt>
+
+<dd>
+<p>If true, sets secure flag. false by default.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong><a name="crush_cookie" class="item">crush_cookie</a></strong></dt>
+
+<dd>
+<p>Parses cookie string and returns a hashref.</p>
+<pre>
+    my $cookies_hashref = crush_cookie($headers-&gt;header('Cookie'));
+    my $cookie_value = $cookies_hashref-&gt;{cookie_name}</pre>
+</dd>
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>CPAN already has many cookie related modules. But there is no simple cookie string generator and parser module.</p>
+<p><a href="../lib/perl5/5.14/CGI.html">the CGI manpage</a>, <a href="../lib/perl5/site_perl/5.14/CGI/Simple.html">the CGI::Simple manpage</a>, <a href="../lib/perl5/site_perl/5.14/Plack.html">the Plack manpage</a>, <a href="../lib/perl5/site_perl/5.14/Dancer/Cookie.html">the Dancer::Cookie manpage</a></p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>Copyright (C) Masahiro Nagano.</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Masahiro Nagano &lt;<a href="mailto:kazeburo@gmail.com">kazeburo@gmail.com</a>&gt;</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Cookie::Baker - Cookie string generator / parser</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

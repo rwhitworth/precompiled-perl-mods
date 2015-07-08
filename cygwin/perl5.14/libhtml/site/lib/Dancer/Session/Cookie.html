@@ -1,0 +1,151 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>Dancer::Session::Cookie - Encrypted cookie-based session backend for Dancer</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Dancer::Session::Cookie - Encrypted cookie-based session backend for Dancer</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#version">VERSION</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#configuration">CONFIGURATION</a></li>
+	<li><a href="#dependency">DEPENDENCY</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>Dancer::Session::Cookie - Encrypted cookie-based session backend for Dancer</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="version">VERSION</a></h1>
+<p>version 0.25</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>Your <em class="file">config.yml</em>:</p>
+<pre>
+    session: &quot;cookie&quot;
+    session_cookie_key: &quot;this random key IS NOT very random&quot;</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module implements a session engine for sessions stored entirely
+in cookies. Usually only <strong>session id</strong> is stored in cookies and
+the session data itself is saved in some external storage, e.g.
+database. This module allows to avoid using external storage at
+all.</p>
+<p>Since server cannot trust any data returned by client in cookies, this
+module uses cryptography to ensure integrity and also secrecy. The
+data your application stores in sessions is completely protected from
+both tampering and analysis on the client-side.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="configuration">CONFIGURATION</a></h1>
+<p>The setting <strong>session</strong> should be set to <code>cookie</code> in order to use this session
+engine in a Dancer application. See <a href="../../lib/perl5/site_perl/5.14/Dancer/Config.html">the Dancer::Config manpage</a>.</p>
+<p>A mandatory setting is needed as well: <strong>session_cookie_key</strong>, which should
+contain a random string of at least 16 characters (shorter keys are
+not cryptographically strong using AES in CBC mode).</p>
+<p>Here is an example configuration to use in your <em class="file">config.yml</em>:</p>
+<pre>
+    session: &quot;cookie&quot;
+    session_cookie_key: &quot;kjsdf07234hjf0sdkflj12*&amp;(@*jk&quot;</pre>
+<p>Compromising <strong>session_cookie_key</strong> will disclose session data to
+clients and proxies or eavesdroppers and will also allow tampering,
+for example session theft. So, your <em class="file">config.yml</em> should be kept at
+least as secure as your database passwords or even more.</p>
+<p>Also, changing <strong>session_cookie_key</strong> will have an effect of immediate
+invalidation of all sessions issued with the old value of key.</p>
+<p><strong>session_cookie_path</strong> can be used to control the path of the session
+cookie.  The default is /.</p>
+<p>The global <strong>session_secure</strong> setting is honoured and a secure (https
+only) cookie will be used if set.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="dependency">DEPENDENCY</a></h1>
+<p>This module depends on <a href="../../lib/perl5/site_perl/5.14/Session/Storage/Secure.html">the Session::Storage::Secure manpage</a>.  Legacy support is provided
+using <a href="../../lib/perl5/site_perl/5.14/Crypt/CBC.html">the Crypt::CBC manpage</a>, <a href="../../lib/perl5/site_perl/5.14/x86_64-cygwin-threads/Crypt/Rijndael.html">the Crypt::Rijndael manpage</a>, <a href="../../lib/perl5/site_perl/5.14/x86_64-cygwin-threads/String/CRC32.html">the String::CRC32 manpage</a>, <a href="../../lib/perl5/5.14/Memoize/Storable.html">the Storable manpage</a> and
+<a href="../../lib/perl5/5.14/x86_64-cygwin-threads/MIME/Base64.html">the MIME::Base64 manpage</a>.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>See <a href="../../lib/perl5/site_perl/5.14/Dancer/Session.html">the Dancer::Session manpage</a> for details about session usage in route handlers.</p>
+<p>See <a href="../../lib/perl5/site_perl/5.14/Plack/Middleware/Session/Cookie.html">the Plack::Middleware::Session::Cookie manpage</a>,
+<a href="../../Catalyst/Plugin/CookiedSession.html">the Catalyst::Plugin::CookiedSession manpage</a>, <a href="../../lib/perl5/site_perl/5.14/Mojolicious/Controller.html#session">session in the Mojolicious::Controller manpage</a> for alternative implementation of this mechanism.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<ul>
+<li>
+<p>Alex Kapranoff &lt;<a href="mailto:kappa@cpan.org">kappa@cpan.org</a>&gt;</p>
+</li>
+<li>
+<p>Alex Sukria &lt;<a href="mailto:sukria@cpan.org">sukria@cpan.org</a>&gt;</p>
+</li>
+<li>
+<p>David Golden &lt;<a href="mailto:dagolden@cpan.org">dagolden@cpan.org</a>&gt;</p>
+</li>
+<li>
+<p>Yanick Champoux &lt;<a href="mailto:yanick@cpan.org">yanick@cpan.org</a>&gt;</p>
+</li>
+</ul>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h1>
+<p>This software is copyright (c) 2014 by Alex Kapranoff.</p>
+<p>This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Dancer::Session::Cookie - Encrypted cookie-based session backend for Dancer</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>
