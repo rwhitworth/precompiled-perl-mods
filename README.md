@@ -9,3 +9,7 @@ This repo will likely contain 64-bit modules for Cygwin (perl 5.14), CentOS 5.8 
 
 Helper function during compilation:
 for i in $(find . -type d) ; do mkdir -p ~/perl/$i ; done ; for i in $(find . -type f) ; do cp -f $i ~/perl/$i ; done
+
+Known Issues
+---
+Cygwin: Dancer did not pass Dancer::Session tests during 'make test'
