@@ -1,5 +1,7 @@
 # precompiled-perl-mods
-Perl modules that have been precompiled for various architectures (PERL5LIB=~/perl5.14/lib/)
+Perl modules that have been precompiled for various architectures 
+
+These modules can be used by configuring your shell to point to them, similar to: PERL5LIB=~/perl/lib:~/perl/arch
 
 These modules have been precompiled in the hopes of making it easier to "install" modules in some situations where a c compiler isn't accessible.  $WORK environments often have limitations that cannot be overcome, but by making the perl modules "portable" by pre-compiling them and making them local to one user, then this limitation can be overcome.
 
