@@ -1,0 +1,276 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>HTML::Tree - build and scan parse-trees of HTML</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Tree - build and scan parse-trees of HTML</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#version">VERSION</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<ul>
+
+		<li><a href="#new">new</a></li>
+		<li><a href="#new_from_file">new_from_file</a></li>
+		<li><a href="#new_from_content">new_from_content</a></li>
+		<li><a href="#new_from_url">new_from_url</a></li>
+	</ul>
+
+	<li><a href="#support">SUPPORT</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#source_repository">SOURCE REPOSITORY</a></li>
+	<li><a href="#acknowledgements">ACKNOWLEDGEMENTS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>HTML::Tree - build and scan parse-trees of HTML</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="version">VERSION</a></h1>
+<p>This document describes version 5.03 of
+HTML::Tree, released September 22, 2012
+as part of <a href="../../../HTML/Tree.html">HTML-Tree</a>.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use HTML::TreeBuilder;
+    my $tree = HTML::TreeBuilder-&gt;new();
+    $tree-&gt;parse_file($filename);</pre>
+<pre>
+        # Then do something with the tree, using HTML::Element
+        # methods -- for example:</pre>
+<pre>
+    $tree-&gt;dump</pre>
+<pre>
+        # Finally:</pre>
+<pre>
+    $tree-&gt;delete;</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>HTML-Tree is a suite of Perl modules for making parse trees out of
+HTML source.  It consists of mainly two modules, whose documentation
+you should refer to: <a href="../../../HTML/TreeBuilder.html">HTML::TreeBuilder</a>
+and <a href="../../../HTML/Element.html">HTML::Element</a>.</p>
+<p>HTML::TreeBuilder is the module that builds the parse trees.  (It uses
+HTML::Parser to do the work of breaking the HTML up into tokens.)</p>
+<p>The tree that TreeBuilder builds for you is made up of objects of the
+class HTML::Element.</p>
+<p>If you find that you do not properly understand the documentation
+for HTML::TreeBuilder and HTML::Element, it may be because you are
+unfamiliar with tree-shaped data structures, or with object-oriented
+modules in general. Sean Burke has written some articles for
+<em>The Perl Journal</em> (<code>www.tpj.com</code>) that seek to provide that background.
+The full text of those articles is contained in this distribution, as:</p>
+<dl>
+<dt><strong><a name="html_tree_aboutobjects_html_tree_aboutobjects" class="item"><a href="../../../HTML/Tree/AboutObjects.html">HTML::Tree::AboutObjects</a></a></strong></dt>
+
+<dd>
+<p>&quot;User's View of Object-Oriented Modules&quot; from TPJ17.</p>
+</dd>
+<dt><strong><a name="html_tree_abouttrees_html_tree_abouttrees" class="item"><a href="../../../HTML/Tree/AboutTrees.html">HTML::Tree::AboutTrees</a></a></strong></dt>
+
+<dd>
+<p>&quot;Trees&quot; from TPJ18</p>
+</dd>
+<dt><strong><a name="html_tree_scanning_html_tree_scanning" class="item"><a href="../../../HTML/Tree/Scanning.html">HTML::Tree::Scanning</a></a></strong></dt>
+
+<dd>
+<p>&quot;Scanning HTML&quot; from TPJ19</p>
+</dd>
+</dl>
+<p>Readers already familiar with object-oriented modules and tree-shaped
+data structures should read just the last article.  Readers without
+that background should read the first, then the second, and then the
+third.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<p>All these methods simply redirect to the corresponding method in
+HTML::TreeBuilder.  It's more efficient to use HTML::TreeBuilder
+directly, and skip loading HTML::Tree at all.</p>
+<p>
+</p>
+<h2><a name="new">new</a></h2>
+<p>Redirects to <a href="../../../HTML/TreeBuilder.html#new">new in the HTML::TreeBuilder manpage</a>.</p>
+<p>
+</p>
+<h2><a name="new_from_file">new_from_file</a></h2>
+<p>Redirects to <a href="../../../HTML/TreeBuilder.html#new_from_file">new_from_file in the HTML::TreeBuilder manpage</a>.</p>
+<p>
+</p>
+<h2><a name="new_from_content">new_from_content</a></h2>
+<p>Redirects to <a href="../../../HTML/TreeBuilder.html#new_from_content">new_from_content in the HTML::TreeBuilder manpage</a>.</p>
+<p>
+</p>
+<h2><a name="new_from_url">new_from_url</a></h2>
+<p>Redirects to <a href="../../../HTML/TreeBuilder.html#new_from_url">new_from_url in the HTML::TreeBuilder manpage</a>.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="support">SUPPORT</a></h1>
+<p>You can find documentation for this module with the perldoc command.</p>
+<pre>
+    perldoc HTML::Tree</pre>
+<pre>
+    You can also look for information at:</pre>
+<ul>
+<li><strong><a name="annocpan_annotated_cpan_documentation" class="item">AnnoCPAN: Annotated CPAN documentation</a></strong>
+
+<p><a href="http://annocpan.org/dist/HTML-Tree">http://annocpan.org/dist/HTML-Tree</a></p>
+</li>
+<li><strong><a name="cpan_ratings" class="item">CPAN Ratings</a></strong>
+
+<p><a href="http://cpanratings.perl.org/d/HTML-Tree">http://cpanratings.perl.org/d/HTML-Tree</a></p>
+</li>
+<li><strong><a name="rt_cpan_s_request_tracker" class="item">RT: CPAN's request tracker</a></strong>
+
+<p><a href="http://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-Tree">http://rt.cpan.org/NoAuth/Bugs.html</a></p>
+</li>
+<li><strong><a name="search_cpan" class="item">Search CPAN</a></strong>
+
+<p><a href="http://search.cpan.org/dist/HTML-Tree">http://search.cpan.org/dist/HTML-Tree</a></p>
+</li>
+<li><strong><a name="stack_overflow" class="item">Stack Overflow</a></strong>
+
+<p><a href="http://stackoverflow.com/questions/tagged/html-tree">http://stackoverflow.com/questions/tagged/html-tree</a></p>
+<p>If you have a question about how to use HTML-Tree, Stack Overflow is
+the place to ask it.  Make sure you tag it both <code>perl</code> and <code>html-tree</code>.</p>
+</li>
+</ul>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../HTML/TreeBuilder.html">the HTML::TreeBuilder manpage</a>, <a href="../../../HTML/Element.html">the HTML::Element manpage</a>, <a href="../../../HTML/Tagset.html">the HTML::Tagset manpage</a>,
+<a href="../../../HTML/Parser.html">the HTML::Parser manpage</a>, <a href="../../../HTML/DOMbo.html">the HTML::DOMbo manpage</a></p>
+<p>The book <em>Perl &amp; LWP</em> by Sean M. Burke published by
+O'Reilly and Associates, 2002.  ISBN: 0-596-00178-9</p>
+<p>It has several chapters to do with HTML processing in general,
+and HTML-Tree specifically.  There's more info at:</p>
+<pre>
+    <a href="http://www.oreilly.com/catalog/perllwp/">http://www.oreilly.com/catalog/perllwp/</a></pre>
+<pre>
+    <a href="http://www.amazon.com/exec/obidos/ASIN/0596001789">http://www.amazon.com/exec/obidos/ASIN/0596001789</a></pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="source_repository">SOURCE REPOSITORY</a></h1>
+<p>HTML-Tree is now maintained using Git.  The main public repository is
+<a href="http://github.com/madsen/HTML-Tree">http://github.com/madsen/HTML-Tree</a>.</p>
+<p>The best way to send a patch is to make a pull request there.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="acknowledgements">ACKNOWLEDGEMENTS</a></h1>
+<p>Thanks to Gisle Aas, Sean Burke and Andy Lester for their original work.</p>
+<p>Thanks to Chicago Perl Mongers (http://chicago.pm.org) for their
+patches submitted to HTML::Tree as part of the Phalanx project
+(http://qa.perl.org/phalanx).</p>
+<p>Thanks to the following people for additional patches and documentation:
+Terrence Brannon, Gordon Lack, Chris Madsen and Ricardo Signes.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Current maintainers:</p>
+<ul>
+<li><strong><a name="christopher_j_madsen_perl_at_cjmweb_net2" class="item">Christopher J. Madsen <code>&lt;perl&nbsp;AT&nbsp;cjmweb.net&gt;</code></a></strong>
+
+</li>
+<li><strong><a name="jeff_fearn_jfearn_at_cpan_org2" class="item">Jeff Fearn <code>&lt;jfearn&nbsp;AT&nbsp;cpan.org&gt;</code></a></strong>
+
+</li>
+</ul>
+<p>Original HTML-Tree author:</p>
+<ul>
+<li><strong><a name="gisle_aas2" class="item">Gisle Aas</a></strong>
+
+</li>
+</ul>
+<p>Former maintainers:</p>
+<ul>
+<li><strong><a name="sean_m_burke2" class="item">Sean M. Burke</a></strong>
+
+</li>
+<li><strong><a name="andy_lester2" class="item">Andy Lester</a></strong>
+
+</li>
+<li><strong><a name="pete_krawczyk_petek_at_cpan_org2" class="item">Pete Krawczyk <code>&lt;petek&nbsp;AT&nbsp;cpan.org&gt;</code></a></strong>
+
+</li>
+</ul>
+<p>You can follow or contribute to HTML-Tree's development at
+<a href="http://github.com/madsen/HTML-Tree">http://github.com/madsen/HTML-Tree</a>.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h1>
+<p>Copyright 1995-1998 Gisle Aas, 1999-2004 Sean M. Burke,
+2005 Andy Lester, 2006 Pete Krawczyk, 2010 Jeff Fearn,
+2012 Christopher J. Madsen.
+(Except the articles contained in HTML::Tree::AboutObjects,
+HTML::Tree::AboutTrees, and HTML::Tree::Scanning, which are all
+copyright 2000 The Perl Journal.)</p>
+<p>Except for those three TPJ articles, the whole HTML-Tree distribution,
+of which this file is a part, is free software; you can redistribute
+it and/or modify it under the same terms as Perl itself.</p>
+<p>Those three TPJ articles may be distributed under the same terms as
+Perl itself.</p>
+<p>The programs in this library are distributed in the hope that they
+will be useful, but without any warranty; without even the implied
+warranty of merchantability or fitness for a particular purpose.</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Tree - build and scan parse-trees of HTML</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>
