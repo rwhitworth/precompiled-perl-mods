@@ -1,0 +1,204 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>Apache::LogFormat::Compiler - Compile a log format string to perl-code</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Apache::LogFormat::Compiler - Compile a log format string to perl-code</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#method">METHOD</a></li>
+	<li><a href="#about_posix__strftime__compiler">ABOUT POSIX::strftime::Compiler</a></li>
+	<li><a href="#add_custom_format_string">ADD CUSTOM FORMAT STRING</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#license">LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>Apache::LogFormat::Compiler - Compile a log format string to perl-code</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use Apache::LogFormat::Compiler;</pre>
+<pre>
+  my $log_handler = Apache::LogFormat::Compiler-&gt;new(&quot;combined&quot;);
+  my $log = $log_handler-&gt;log_line(
+      $env,
+      $res,
+      $length,
+      $reqtime,
+      $time
+  );</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Compile a log format string to perl-code. For faster generation of access_log lines.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="method">METHOD</a></h1>
+<dl>
+<dt><strong><a name="new" class="item"><code>new($fmt:String)</code></a></strong></dt>
+
+<dd>
+<p>Takes a format string (or a preset template <code>combined</code> or <code>custom</code>)
+to specify the log format. This module implements a subset of
+<em>Apache's LogFormat templates</em>:</p>
+<pre>
+   %%    a percent sign
+   %h    REMOTE_ADDR from the PSGI environment, or -
+   %l    remote logname not implemented (currently always -)
+   %u    REMOTE_USER from the PSGI environment, or -
+   %t    [local timestamp, in default format]
+   %r    REQUEST_METHOD, REQUEST_URI and SERVER_PROTOCOL from the PSGI environment
+   %s    the HTTP status code of the response
+   %b    content length of the response
+   %T    custom field for handling times in subclasses
+   %D    custom field for handling sub-second times in subclasses
+   %v    SERVER_NAME from the PSGI environment, or -
+   %V    HTTP_HOST or SERVER_NAME from the PSGI environment, or -
+   %p    SERVER_PORT from the PSGI environment
+   %P    the worker's process id
+   %m    REQUEST_METHOD from the PSGI environment
+   %U    PATH_INFO from the PSGI environment
+   %q    QUERY_STRING from the PSGI environment
+   %H    SERVER_PROTOCOL from the PSGI environment</pre>
+<p>In addition, custom values can be referenced, using <code>%{name}</code>,
+with one of the mandatory modifier flags <code>i</code>, <code>o</code> or <code>t</code>:</p>
+<pre>
+   %{variable-name}i    HTTP_VARIABLE_NAME value from the PSGI environment
+   %{header-name}o      header-name header in the response
+   %{time-format]t      localtime in the specified strftime format</pre>
+</dd>
+<dt><strong><a name="log_line" class="item">log_line($env:HashRef, $res:ArrayRef, $length:Integer, $reqtime:Integer, $time:Integer): $log:String</a></strong></dt>
+
+<dd>
+<p>Generates log line.</p>
+<pre>
+  $env      PSGI env request HashRef
+  $res      PSGI response ArrayRef
+  $length   Content-Length
+  $reqtime  The time taken to serve request in microseconds. optional
+  $time     Time the request was received. optional. If $time is undefined. current timestamp is used.</pre>
+<p>Sample psgi</p>
+<pre>
+  use Plack::Builder;
+  use Time::HiRes;
+  use Apache::LogFormat::Compiler;</pre>
+<pre>
+  my $log_handler = Apache::LogFormat::Compiler-&gt;new(
+      '%h %l %u %t &quot;%r&quot; %&gt;s %b &quot;%{Referer}i&quot; &quot;%{User-agent}i&quot; %D'
+  );
+  my $compile_log_app = builder {
+      enable sub {
+          my $app = shift;
+          sub {
+              my $env = shift;
+              my $t0 = [gettimeofday];
+              my $res = $app-&gt;();
+              my $reqtime = int(Time::HiRes::tv_interval($t0) * 1_000_000);
+              $env-&gt;{psgi.error}-&gt;print($log_handler-&gt;log_line(
+                  $env,$res,6,$reqtime, $t0-&gt;[0]));
+          }
+      };
+      $app
+  };</pre>
+</dd>
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="about_posix__strftime__compiler">ABOUT POSIX::strftime::Compiler</a></h1>
+<p>This module uses <a href="../../../../POSIX/strftime/Compiler.html">the POSIX::strftime::Compiler manpage</a> for generate datetime string. POSIX::strftime::Compiler provides GNU C library compatible <code>strftime(3)</code>. But this module will not affected by the system locale. This feature is useful when you want to write loggers, servers and portable applications.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="add_custom_format_string">ADD CUSTOM FORMAT STRING</a></h1>
+<p>Apache::LogFormat::Compiler allows one to add a custom format string</p>
+<pre>
+  my $log_handler = Apache::LogFormat::Compiler-&gt;new(
+      '%z %{HTTP_X_FORWARDED_FOR|REMOTE_ADDR}Z',
+      char_handlers =&gt; +{
+          'z' =&gt; sub {
+              my ($env,$req) = @_;
+              return $env-&gt;{HTTP_X_FORWARDED_FOR};
+          }
+      },
+      block_handlers =&gt; +{
+          'Z' =&gt; sub {
+              my ($block,$env,$req) = @_;
+              # block eq 'HTTP_X_FORWARDED_FOR|REMOTE_ADDR'
+              my ($main, $alt) = split('\|', $args);
+              return exists $env-&gt;{$main} ? $env-&gt;{$main} : $env-&gt;{$alt};
+          }
+      },
+  );</pre>
+<p>Any single letter can be used, other than those already defined by Apache::LogFormat::Compiler.
+Your sub is called with two or three arguments: the content inside the <code>{}</code>
+from the format (block_handlers only), the PSGI environment (<code>$env</code>),
+and the ArrayRef of the response. It should return the string to be logged.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Masahiro Nagano &lt;<a href="mailto:kazeburo@gmail.com">kazeburo@gmail.com</a>&gt;</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../../Plack/Middleware/AccessLog.html">the Plack::Middleware::AccessLog manpage</a>, <a href="http://httpd.apache.org/docs/2.2/mod/mod_log_config.html">http://httpd.apache.org/docs/2.2/mod/mod_log_config.html</a></p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>Copyright (C) Masahiro Nagano</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Apache::LogFormat::Compiler - Compile a log format string to perl-code</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

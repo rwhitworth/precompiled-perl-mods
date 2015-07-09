@@ -12,4 +12,5 @@ for i in $(find . -type d) ; do mkdir -p ~/perl/$i ; done ; for i in $(find . -t
 
 Known Issues
 ---
-Cygwin: Dancer did not pass Dancer::Session tests during 'make test'
+(FIXED!) Cygwin: Dancer did not pass Dancer::Session tests during 'make test'
+Cygwin: Test::SharedFork did not pass tests during 'make test'

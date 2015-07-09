@@ -1,0 +1,165 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>Math::Random::ISAAC::XS - C implementation of the ISAAC PRNG algorithm</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Math::Random::ISAAC::XS - C implementation of the ISAAC PRNG algorithm</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#version">VERSION</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<ul>
+
+		<li><a href="#new">new</a></li>
+		<li><a href="#rand">rand</a></li>
+		<li><a href="#irand">irand</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Math::Random::ISAAC::XS - C implementation of the ISAAC PRNG algorithm</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="version">VERSION</a></h1>
+<p>version 1.004</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>This module implements the same interface as <code>Math::Random::ISAAC</code> and can
+be used as a drop-in replacement. This is the recommended implementation of
+the module, based on Bob Jenkins' reference implementation in C.</p>
+<p>Selecting the backend to use manually really only has two uses:</p>
+<ul>
+<li>
+<p>If you are trying to avoid the small overhead incurred with dispatching
+method calls to the appropriate backend modules.</p>
+</li>
+<li>
+<p>If you are testing the module for performance and wish to explicitly decide
+which module you would like to use.</p>
+</li>
+</ul>
+<p>Example code:</p>
+<pre>
+  # With Math::Random::ISAAC
+  my $rng = Math::Random::ISAAC-&gt;new(time);
+  my $rand = $rng-&gt;rand();</pre>
+<pre>
+  # With Math::Random::ISAAC::XS
+  my $rng = Math::Random::ISAAC::XS-&gt;new(time);
+  my $rand = $rng-&gt;rand();</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>See <a href="../../../../../Math/Random/ISAAC.html">the Math::Random::ISAAC manpage</a> for the full description.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<p>
+</p>
+<h2><a name="new">new</a></h2>
+<pre>
+  Math::Random::ISAAC::XS-&gt;new( @seeds )</pre>
+<p>Implements the interface as specified in <code>Math::Random::ISAAC</code></p>
+<p>
+</p>
+<h2><a name="rand">rand</a></h2>
+<pre>
+  $rng-&gt;rand()</pre>
+<p>Implements the interface as specified in <code>Math::Random::ISAAC</code></p>
+<p>
+</p>
+<h2><a name="irand">irand</a></h2>
+<pre>
+  $rng-&gt;irand()</pre>
+<p>Implements the interface as specified in <code>Math::Random::ISAAC</code></p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../../../Math/Random/ISAAC.html">the Math::Random::ISAAC manpage</a></p>
+<p>1;</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Please report any bugs or feature requests on the bugtracker website
+<a href="http://rt.cpan.org/NoAuth/Bugs.html?Dist=Math-Random-ISAAC-XS">http://rt.cpan.org/NoAuth/Bugs.html?Dist=Math-Random-ISAAC-XS</a></p>
+<p>When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Jonathan Yu &lt;<a href="mailto:jawnsy@cpan.org">jawnsy@cpan.org</a>&gt;</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h1>
+<p>Legally speaking, this package and its contents are:</p>
+<pre>
+  Copyright (c) 2011 by Jonathan Yu &lt;jawnsy@cpan.org&gt;.</pre>
+<p>But this is really just a legal technicality that allows the author to
+offer this package under the public domain and also a variety of licensing
+options. For all intents and purposes, this is public domain software,
+which means you can do whatever you want with it.</p>
+<p>The software is provided &quot;AS IS&quot;, without warranty of any kind, express or
+implied, including but not limited to the warranties of merchantability,
+fitness for a particular purpose and noninfringement. In no event shall the
+authors or copyright holders be liable for any claim, damages or other
+liability, whether in an action of contract, tort or otherwise, arising from,
+out of or in connection with the software or the use or other dealings in
+the software.</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Math::Random::ISAAC::XS - C implementation of the ISAAC PRNG algorithm</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>
