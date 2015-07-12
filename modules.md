@@ -1,3 +1,4 @@
+```
 local::lib
 CPAN
 Moo
@@ -24,5 +25,7 @@ Module::Build
 Test::Harness
 YAML
 version
-Encode::Locale (problems in Cygwin?)
+Encode::Locale (problems in Cygwin, can be patched by changing tests in t/env.t from 13 to 10)
 LWP
+
+```
