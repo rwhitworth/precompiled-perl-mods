@@ -1,0 +1,470 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>Test::Differences - Test strings and data structures and show differences if not ok</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Test::Differences - Test strings and data structures and show differences if not ok</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#version">VERSION</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#export">EXPORT</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#diff_styles">DIFF STYLES</a></li>
+	<li><a href="#unicode">UNICODE</a></li>
+	<li><a href="#deploying">DEPLOYING</a></li>
+	<li><a href="#limitations">LIMITATIONS</a></li>
+	<ul>
+
+		<li><a href="#test_or_test__more"><code>Test</code> or <code>Test::More</code></a></li>
+		<li><a href="#exporting">Exporting</a></li>
+		<li><a href="#unicode">Unicode</a></li>
+		<li><a href="#data__dumper_and_older_perls_"><code>Data::Dumper</code> and older Perls.</a></li>
+	</ul>
+
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#license">LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>Test::Differences - Test strings and data structures and show differences if not ok</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="version">VERSION</a></h1>
+<p>0.62</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+   use Test;    ## Or use Test::More
+   use Test::Differences;</pre>
+<pre>
+   eq_or_diff $got,  &quot;a\nb\nc\n&quot;,   &quot;testing strings&quot;;
+   eq_or_diff \@got, [qw( a b c )], &quot;testing arrays&quot;;</pre>
+<pre>
+   ## Passing options:
+   eq_or_diff $got, $expected, $name, { context =&gt; 300 };  ## options</pre>
+<pre>
+   ## Using with DBI-like data structures</pre>
+<pre>
+   use DBI;</pre>
+<pre>
+   ... open connection &amp; prepare statement and @expected_... here...</pre>
+<pre>
+   eq_or_diff $sth-&gt;fetchall_arrayref, \@expected_arrays  &quot;testing DBI arrays&quot;;
+   eq_or_diff $sth-&gt;fetchall_hashref,  \@expected_hashes, &quot;testing DBI hashes&quot;;</pre>
+<pre>
+   ## To force textual or data line numbering (text lines are numbered 1..):
+   eq_or_diff_text ...;
+   eq_or_diff_data ...;</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="export">EXPORT</a></h1>
+<p>This module exports three test functions and four diff-style functions:</p>
+<ul>
+<li><strong><a name="test_functions" class="item">Test functions</a></strong>
+
+<ul>
+<li><strong><a name="eq_or_diff" class="item"><code>eq_or_diff</code></a></strong>
+
+</li>
+<li><strong><a name="eq_or_diff_data" class="item"><code>eq_or_diff_data</code></a></strong>
+
+</li>
+<li><strong><a name="eq_or_diff_text" class="item"><code>eq_or_diff_text</code></a></strong>
+
+</li>
+</ul>
+</li>
+<li><strong><a name="diff_style_functions" class="item">Diff style functions</a></strong>
+
+<ul>
+<li><strong><a name="table_diff" class="item"><code>table_diff</code> (the default)</a></strong>
+
+</li>
+<li><strong><a name="unified_diff" class="item"><code>unified_diff</code></a></strong>
+
+</li>
+<li><strong><a name="oldstyle_diff" class="item"><code>oldstyle_diff</code></a></strong>
+
+</li>
+<li><strong><a name="context_diff" class="item"><code>context_diff</code></a></strong>
+
+</li>
+</ul>
+</li>
+</ul>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>When the code you're testing returns multiple lines, records or data
+structures and they're just plain wrong, an equivalent to the Unix
+<code>diff</code> utility may be just what's needed.  Here's output from an
+example test script that checks two text documents and then two
+(trivial) data structures:</p>
+<pre>
+ t/99example....1..3
+ not ok 1 - differences in text
+ #     Failed test ((eval 2) at line 14)
+ #     +---+----------------+----------------+
+ #     | Ln|Got             |Expected        |
+ #     +---+----------------+----------------+
+ #     |  1|this is line 1  |this is line 1  |
+ #     *  2|this is line 2  |this is line b  *
+ #     |  3|this is line 3  |this is line 3  |
+ #     +---+----------------+----------------+
+ not ok 2 - differences in whitespace
+ #     Failed test ((eval 2) at line 20)
+ #     +---+------------------+------------------+
+ #     | Ln|Got               |Expected          |
+ #     +---+------------------+------------------+
+ #     |  1|        indented  |        indented  |
+ #     *  2|        indented  |\tindented        *
+ #     |  3|        indented  |        indented  |
+ #     +---+------------------+------------------+
+ not ok 3
+ #     Failed test ((eval 2) at line 22)
+ #     +----+-------------------------------------+----------------------------+
+ #     | Elt|Got                                  |Expected                    |
+ #     +----+-------------------------------------+----------------------------+
+ #     *   0|bless( [                             |[                           *
+ #     *   1|  'Move along, nothing to see here'  |  'Dry, humorless message'  *
+ #     *   2|], 'Test::Builder' )                 |]                           *
+ #     +----+-------------------------------------+----------------------------+
+ # Looks like you failed 3 tests of 3.</pre>
+<p>eq_or_diff_...() compares two strings or (limited) data structures and
+either emits an ok indication or a side-by-side diff.  Test::Differences
+is designed to be used with Test.pm and with Test::Simple, Test::More,
+and other Test::Builder based testing modules.  As the SYNOPSIS shows,
+another testing module must be used as the basis for your test suite.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<p>The options to <a href="#eq_or_diff"><code>eq_or_diff</code></a> give some fine-grained control over the output.</p>
+<ul>
+<li><strong><a name="context" class="item"><code>context</code></a></strong>
+
+<p>This allows you to control the amount of context shown:</p>
+<pre>
+   eq_or_diff $got, $expected, $name, { context =&gt; 50000 };</pre>
+<p>will show you lots and lots of context.  Normally, <a href="#eq_or_diff"><code>eq_or_diff()</code></a> uses
+some heuristics to determine whether to show 3 lines of context (like
+a normal unified diff) or 25 lines.</p>
+</li>
+<li><strong><a name="data_type" class="item"><code>data_type</code></a></strong>
+
+<p><code>text</code> or <code>data</code>. See <a href="#eq_or_diff_text"><code>eq_or_diff_text</code></a> and <a href="#eq_or_diff_data"><code>eq_or_diff_data</code></a> to
+understand this. You can usually ignore this.</p>
+</li>
+<li><strong><a name="sortkeys" class="item"><code>Sortkeys</code></a></strong>
+
+<p>If passed, whatever value is added is used as the argument for <a href="../lib/perl5/5.14/x86_64-cygwin-threads/Data/Dumper.html">the Data::Dumper manpage</a>
+Sortkeys option. See the <a href="../lib/perl5/5.14/x86_64-cygwin-threads/Data/Dumper.html">the Data::Dumper manpage</a> docs to understand how you can
+control the Sortkeys behavior.</p>
+</li>
+<li><strong><a name="filename_a_and_filename_b" class="item"><code>filename_a</code> and <code>filename_b</code></a></strong>
+
+<p>The column headers to use in the output. They default to 'Got' and 'Expected'.</p>
+</li>
+</ul>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="diff_styles">DIFF STYLES</a></h1>
+<p>For extremely long strings, a table diff can wrap on your screen and be hard
+to read.  If you are comfortable with different diff formats, you can switch
+to a format more suitable for your data.  These are the four formats supported
+by the <a href="../Text/Diff.html">the Text::Diff manpage</a> module and are set with the following functions:</p>
+<ul>
+<li><strong><code>table_diff</code> (the default)</strong>
+
+</li>
+<li><strong><code>unified_diff</code></strong>
+
+</li>
+<li><strong><code>oldstyle_diff</code></strong>
+
+</li>
+<li><strong><code>context_diff</code></strong>
+
+</li>
+</ul>
+<p>You can run the following to understand the different diff output styles:</p>
+<pre>
+ use Test::More 'no_plan';
+ use Test::Differences;</pre>
+<pre>
+ my $long_string = join '' =&gt; 1..40;</pre>
+<pre>
+ TODO: {
+     local $TODO = 'Testing diff styles';</pre>
+<pre>
+     # this is the default and does not need to explicitly set unless you need
+     # to reset it back from another diff type
+     table_diff;
+     eq_or_diff $long_string, &quot;-$long_string&quot;, 'table diff';</pre>
+<pre>
+     unified_diff;
+     eq_or_diff $long_string, &quot;-$long_string&quot;, 'unified diff';</pre>
+<pre>
+     context_diff;
+     eq_or_diff $long_string, &quot;-$long_string&quot;, 'context diff';</pre>
+<pre>
+     oldstyle_diff;
+     eq_or_diff $long_string, &quot;-$long_string&quot;, 'oldstyle diff';
+ }</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="unicode">UNICODE</a></h1>
+<p>Generally you'll find that the following test output is disappointing.</p>
+<pre>
+    use Test::Differences;</pre>
+<pre>
+    my $want = { 'Traditional Chinese' =&gt; '中國' };
+    my $have = { 'Traditional Chinese' =&gt; '中国' };</pre>
+<pre>
+    eq_or_diff $have, $want, 'Unicode, baby';</pre>
+<p>The output looks like this:</p>
+<pre>
+    #   Failed test 'Unicode, baby'
+    #   at t/unicode.t line 12.
+    # +----+----------------------------+----------------------------+
+    # | Elt|Got                         |Expected                    |
+    # +----+----------------------------+----------------------------+
+    # |   0|'Traditional Chinese'       |'Traditional Chinese'       |
+    # *   1|'\xe4\xb8\xad\xe5\x9b\xbd'  |'\xe4\xb8\xad\xe5\x9c\x8b'  *
+    # +----+----------------------------+----------------------------+
+    # Looks like you failed 1 test of 1.
+    Dubious, test returned 1 (wstat 256, 0x100)</pre>
+<p>This is generally not helpful and someone points out that you didn't declare
+your test program as being utf8, so you do that:</p>
+<pre>
+    use Test::Differences;
+    use utf8;</pre>
+<pre>
+    my $want = { 'Traditional Chinese' =&gt; '中國' };
+    my $have = { 'Traditional Chinese' =&gt; '中国' };</pre>
+<pre>
+    eq_or_diff $have, $want, 'Unicode, baby';</pre>
+<p>Here's what you get:</p>
+<pre>
+    #   Failed test 'Unicode, baby'
+    #   at t/unicode.t line 12.
+    # +----+-----------------------+-----------------------+
+    # | Elt|Got                    |Expected               |
+    # +----+-----------------------+-----------------------+
+    # |   0|'Traditional Chinese'  |'Traditional Chinese'  |
+    # *   1|'\x{4e2d}\x{56fd}'     |'\x{4e2d}\x{570b}'     *
+    # +----+-----------------------+-----------------------+
+    # Looks like you failed 1 test of 1.
+    Dubious, test returned 1 (wstat 256, 0x100)
+    Failed 1/1 subtests</pre>
+<p>That's better, but still awful. However, if you have <code>Text::Diff</code> 0.40 or
+higher installed, you can add this to your code:</p>
+<pre>
+    BEGIN { $ENV{DIFF_OUTPUT_UNICODE} = 1 }</pre>
+<p>Make sure you do this <em>before</em> you load <a href="../Text/Diff.html">the Text::Diff manpage</a>. Then this is the output:</p>
+<pre>
+    # +----+-----------------------+-----------------------+
+    # | Elt|Got                    |Expected               |
+    # +----+-----------------------+-----------------------+
+    # |   0|'Traditional Chinese'  |'Traditional Chinese'  |
+    # *   1|'中国'                 |'中國'                 *
+    # +----+-----------------------+-----------------------+</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="deploying">DEPLOYING</a></h1>
+<p>There are several basic ways of deploying Test::Differences requiring more or less
+labor by you or your users.</p>
+<ul>
+<li>
+<p>Fallback to <code>is_deeply</code>.</p>
+<p>This is your best option if you want this module to be optional.</p>
+<pre>
+ use Test::More;
+ BEGIN {
+     if (!eval q{ use Test::Differences; 1 }) {
+         *eq_or_diff = \&amp;is_deeply;
+     }
+ }</pre>
+</li>
+<li>
+<pre>
+ eval &quot;use Test::Differences&quot;;</pre>
+<p>If you want to detect the presence of Test::Differences on the fly, something
+like the following code might do the trick for you:</p>
+<pre>
+    use Test qw( !ok );   ## get all syms *except* ok</pre>
+<pre>
+    eval &quot;use Test::Differences&quot;;
+    use Data::Dumper;</pre>
+<pre>
+    sub ok {
+        goto &amp;eq_or_diff if defined &amp;eq_or_diff &amp;&amp; @_ &gt; 1;
+        @_ = map ref $_ ? Dumper( @_ ) : $_, @_;
+        goto Test::&amp;ok;
+    }</pre>
+<pre>
+    plan tests =&gt; 1;</pre>
+<pre>
+    ok &quot;a&quot;, &quot;b&quot;;</pre>
+</li>
+<li>
+<p>PREREQ_PM =&gt; { .... &quot;Test::Differences&quot; =&gt; 0, ... }</p>
+<p>This method will let CPAN and CPANPLUS users download it automatically.  It
+will discomfit those users who choose/have to download all packages manually.</p>
+</li>
+<li>
+<p>t/lib/Test/Differences.pm, t/lib/Text/Diff.pm, ...</p>
+<p>By placing Test::Differences and its prerequisites in the t/lib directory, you
+avoid forcing your users to download the Test::Differences manually if they
+aren't using CPAN or CPANPLUS.</p>
+<p>If you put a <code>use lib &quot;t/lib&quot;;</code> in the top of each test suite before the
+<code>use Test::Differences;</code>, <code>make test</code> should work well.</p>
+<p>You might want to check once in a while for new Test::Differences releases
+if you do this.</p>
+</li>
+</ul>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="limitations">LIMITATIONS</a></h1>
+<p>
+</p>
+<h2><a name="test_or_test__more"><code>Test</code> or <code>Test::More</code></a></h2>
+<p>This module &quot;mixes in&quot; with Test.pm or any of the test libraries based on
+Test::Builder (Test::Simple, Test::More, etc).  It does this by peeking to see
+whether Test.pm or Test/Builder.pm is in %INC, so if you are not using one of
+those, it will print a warning and play dumb by not emitting test numbers (or
+incrementing them).  If you are using one of these, it should interoperate
+nicely.</p>
+<p>
+</p>
+<h2><a name="exporting">Exporting</a></h2>
+<p>Exports all 3 functions by default (and by design).  Use</p>
+<pre>
+    use Test::Differences ();</pre>
+<p>to suppress this behavior if you don't like the namespace pollution.</p>
+<p>This module will not override functions like <code>ok()</code>, <code>is()</code>, <code>is_deeply()</code>, etc.  If
+it did, then you could <code>eval &quot;use Test::Differences qw( is_deeply );&quot;</code> to get
+automatic upgrading to diffing behaviors without the <code>sub my_ok</code> shown above.
+Test::Differences intentionally does not provide this behavior because this
+would mean that Test::Differences would need to emulate every popular test
+module out there, which would require far more coding and maintenance that I'm
+willing to do.  Use the eval and my_ok deployment shown above if you want some
+level of automation.</p>
+<p>
+</p>
+<h2><a name="unicode">Unicode</a></h2>
+<p>Perls before 5.6.0 don't support characters &gt; 255 at all, and 5.6.0
+seems broken.  This means that you might get odd results using perl5.6.0
+with unicode strings.</p>
+<p>
+</p>
+<h2><a name="data__dumper_and_older_perls_"><code>Data::Dumper</code> and older Perls.</a></h2>
+<p>Relies on Data::Dumper (for now), which, prior to perl5.8, will not always
+report hashes in the same order.  <code> $Data::Dumper::Sortkeys </code> <em>is</em> set to 1,
+so on more recent versions of Data::Dumper, this should not occur.  Check CPAN
+to see if it's been peeled out of the main perl distribution and backported.
+Reported by Ilya Martynov &lt;<a href="mailto:ilya@martynov.org">ilya@martynov.org</a>&gt;, although the Sortkeys &quot;future
+perfect&quot; workaround has been set in anticipation of a new Data::Dumper for a
+while.  Note that the two hashes should report the same here:</p>
+<pre>
+    not ok 5
+    #     Failed test (t/ctrl/05-home.t at line 51)
+    # +----+------------------------+----+------------------------+
+    # | Elt|Got                     | Elt|Expected                |
+    # +----+------------------------+----+------------------------+
+    # |   0|{                       |   0|{                       |
+    # |   1|  'password' =&gt; '',     |   1|  'password' =&gt; '',     |
+    # *   2|  'method' =&gt; 'login',  *    |                        |
+    # |   3|  'ctrl' =&gt; 'home',     |   2|  'ctrl' =&gt; 'home',     |
+    # |    |                        *   3|  'method' =&gt; 'login',  *
+    # |   4|  'email' =&gt; 'test'     |   4|  'email' =&gt; 'test'     |
+    # |   5|}                       |   5|}                       |
+    # +----+------------------------+----+------------------------+</pre>
+<p>Data::Dumper also overlooks the difference between</p>
+<pre>
+    $a[0] = \$a[1];
+    $a[1] = \$a[0];   # $a[0] = \$a[1]</pre>
+<p>and</p>
+<pre>
+    $x = \$y;
+    $y = \$x;
+    @a = ( $x, $y );  # $a[0] = \$y, not \$a[1]</pre>
+<p>The former involves two scalars, the latter 4: $x, $y, and @a[0,1].
+This was carefully explained to me in words of two syllables or less by
+Yves Orton &lt;<a href="mailto:demerphq@hotmail.com">demerphq@hotmail.com</a>&gt;.  The plan to address this is to allow
+you to select Data::Denter or some other module of your choice as an
+option.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<pre>
+    Barrie Slaymaker &lt;barries@slaysys.com&gt; - original author</pre>
+<pre>
+    Curtis &quot;Ovid&quot; Poe &lt;ovid@cpan.org&gt;</pre>
+<pre>
+    David Cantrell &lt;david@cantrell.org.uk&gt;</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>Copyright 2001-2008 Barrie Slaymaker, All Rights Reserved.</p>
+<p>You may use this software under the terms of the GNU public license, any
+version, or the Artistic license.</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Test::Differences - Test strings and data structures and show differences if not ok</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,174 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>Attribute::Params::Validate - Define validation through subroutine attributes</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Attribute::Params::Validate - Define validation through subroutine attributes</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#version">VERSION</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#export">EXPORT</a></li>
+		<li><a href="#attributes">ATTRIBUTES</a></li>
+		<li><a href="#oo">OO</a></li>
+		<li><a href="#caveats">CAVEATS</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>Attribute::Params::Validate - Define validation through subroutine attributes</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="version">VERSION</a></h1>
+<p>version 1.20</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use Attribute::Params::Validate qw(:all);</pre>
+<pre>
+  # takes named params (hash or hashref)
+  # foo is mandatory, bar is optional
+  sub foo : Validate( foo =&gt; 1, bar =&gt; 0 )
+  {
+      # insert code here
+  }</pre>
+<pre>
+  # takes positional params
+  # first two are mandatory, third is optional
+  sub bar : ValidatePos( 1, 1, 0 )
+  {
+      # insert code here
+  }</pre>
+<pre>
+  # for some reason Perl insists that the entire attribute be on one line
+  sub foo2 : Validate( foo =&gt; { type =&gt; ARRAYREF }, bar =&gt; { can =&gt; [ 'print', 'flush', 'frobnicate' ] }, baz =&gt; { type =&gt; SCALAR, callbacks =&gt; { 'numbers only' =&gt; sub { shift() =~ /^\d+$/ }, 'less than 90' =&gt; sub { shift() &lt; 90 } } } )
+  {
+      # insert code here
+  }</pre>
+<pre>
+  # note that this is marked as a method.  This is very important!
+  sub baz : Validate( foo =&gt; { type =&gt; ARRAYREF }, bar =&gt; { isa =&gt; 'Frobnicator' } ) method
+  {
+      # insert code here
+  }</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The Attribute::Params::Validate module allows you to validate method
+or function call parameters just like Params::Validate does.  However,
+this module allows you to specify your validation spec as an
+attribute, rather than by calling the <code>validate</code> routine.</p>
+<p>Please see Params::Validate for more information on how you can
+specify what validation is performed.</p>
+<p>
+</p>
+<h2><a name="export">EXPORT</a></h2>
+<p>This module exports everything that Params::Validate does except for
+the <code>validate</code> and <code>validate_pos</code> subroutines.</p>
+<p>
+</p>
+<h2><a name="attributes">ATTRIBUTES</a></h2>
+<ul>
+<li><strong><a name="validate" class="item">Validate</a></strong>
+
+<p>This attribute corresponds to the <code>validate</code> subroutine in
+Params::Validate.</p>
+</li>
+<li><strong><a name="validatepos" class="item">ValidatePos</a></strong>
+
+<p>This attribute corresponds to the <code>validate_pos</code> subroutine in
+Params::Validate.</p>
+</li>
+</ul>
+<p>
+</p>
+<h2><a name="oo">OO</a></h2>
+<p>If you are using this module to mark <strong>methods</strong> for validation, as
+opposed to subroutines, it is crucial that you mark these methods with
+the <code>:method</code> attribute, as well as the <a href="#validate"><code>Validate</code></a> or <a href="#validatepos"><code>ValidatePos</code></a>
+attribute.</p>
+<p>If you do not do this, then the object or class used in the method
+call will be passed to the validation routines, which is probably not
+what you want.</p>
+<p>
+</p>
+<h2><a name="caveats">CAVEATS</a></h2>
+<p>You <strong>must</strong> put all the arguments to the <a href="#validate"><code>Validate</code></a> or <a href="#validatepos"><code>ValidatePos</code></a>
+attribute on a single line, or Perl will complain.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>Params::Validate</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<ul>
+<li>
+<p>Dave Rolsky &lt;<a href="mailto:autarch@urth.org">autarch@urth.org</a>&gt;</p>
+</li>
+<li>
+<p>Ilya Martynov &lt;<a href="mailto:ilya@martynov.org">ilya@martynov.org</a>&gt;</p>
+</li>
+</ul>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h1>
+<p>This software is Copyright (c) 2001 - 2015 by Dave Rolsky and Ilya Martynov.</p>
+<p>This is free software, licensed under:</p>
+<pre>
+  The Artistic License 2.0 (GPL Compatible)</pre>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Attribute::Params::Validate - Define validation through subroutine attributes</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

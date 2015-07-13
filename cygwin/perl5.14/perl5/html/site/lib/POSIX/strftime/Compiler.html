@@ -1,0 +1,171 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>POSIX::strftime::Compiler - GNU C library compatible strftime for loggers and servers</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;POSIX::strftime::Compiler - GNU C library compatible strftime for loggers and servers</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#function">FUNCTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#format_characters">FORMAT CHARACTERS</a></li>
+	<li><a href="#a_recommend_module">A RECOMMEND MODULE</a></li>
+	<li><a href="#performance_issues_on_windows">PERFORMANCE ISSUES ON WINDOWS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>POSIX::strftime::Compiler - GNU C library compatible strftime for loggers and servers</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use POSIX::strftime::Compiler qw/strftime/;</pre>
+<pre>
+    say strftime('%a, %d %b %Y %T %z',localtime):
+    
+    my $fmt = '%a, %d %b %Y %T %z';
+    my $psc = POSIX::strftime::Compiler-&gt;new($fmt);
+    say $psc-&gt;to_string(localtime);</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>POSIX::strftime::Compiler provides GNU C library compatible <a href="#strftime"><code>strftime(3)</code></a>. But this module will not affected
+by the system locale.  This feature is useful when you want to write loggers, servers and portable applications.</p>
+<p>For generate same result strings on any locale, POSIX::strftime::Compiler wraps POSIX::strftime and 
+converts some format characters to perl code</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="function">FUNCTION</a></h1>
+<dl>
+<dt><strong><a name="strftime" class="item">strftime($fmt:String, @time)</a></strong></dt>
+
+<dd>
+<p>Generate formatted string from a format and time.</p>
+<pre>
+  my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+  strftime('%d/%b/%Y:%T %z',$sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst):</pre>
+<p>Compiled codes are stored in <code>%POSIX::strftime::Compiler::STRFTIME</code>. This function is not exported by default.</p>
+</dd>
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="new" class="item"><code>new($fmt)</code></a></strong></dt>
+
+<dd>
+<p>create instance of POSIX::strftime::Compiler</p>
+</dd>
+<dt><strong><a name="to_string" class="item"><code>to_string(@time)</code></a></strong></dt>
+
+<dd>
+<p>Generate formatted string from time.</p>
+</dd>
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="format_characters">FORMAT CHARACTERS</a></h1>
+<p>POSIX::strftime::Compiler supports almost all characters that GNU <a href="#strftime"><code>strftime(3)</code></a> supports. 
+But <code>%E[cCxXyY]</code> and <code>%O[deHImMSuUVwWy]</code> are not supported, just remove E and O prefix.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="a_recommend_module">A RECOMMEND MODULE</a></h1>
+<dl>
+<dt><strong><a name="time_tzoffset" class="item"><a href="../../Time/TZOffset.html">the Time::TZOffset manpage</a></a></strong></dt>
+
+<dd>
+<p>If <a href="../../Time/TZOffset.html">the Time::TZOffset manpage</a> is available, P::s::Compiler use it for more faster time zone offset calculation.
+I strongly recommend you to install this if you use <code>%z</code>.</p>
+</dd>
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="performance_issues_on_windows">PERFORMANCE ISSUES ON WINDOWS</a></h1>
+<p>Windows and Cygwin and some system may not support <code>%z</code> and <code>%Z</code>. For these system, 
+POSIX::strftime::Compiler calculate time zone offset and find zone name. This is not fast.
+If you need performance on Windows and Cygwin, please install <a href="../../Time/TZOffset.html">the Time::TZOffset manpage</a></p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<dl>
+<dt><strong><a name="posix_strftime_gnu" class="item"><a href="../../POSIX/strftime/GNU.html">the POSIX::strftime::GNU manpage</a></a></strong></dt>
+
+<dd>
+<p>POSIX::strftime::Compiler is built on POSIX::strftime::GNU::PP code</p>
+</dd>
+<dt><strong><a name="posix" class="item"><a href="../../lib/perl5/5.14/x86_64-cygwin-threads/POSIX.html">the POSIX manpage</a></a></strong></dt>
+
+<dt><strong><a name="apache_logformat_compiler" class="item"><a href="../../Apache/LogFormat/Compiler.html">the Apache::LogFormat::Compiler manpage</a></a></strong></dt>
+
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>Copyright (C) Masahiro Nagano.</p>
+<p>Format specification is based on <a href="#strftime"><code>strftime(3)</code></a> manual page which is a part of the Linux man-pages project.</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Masahiro Nagano &lt;<a href="mailto:kazeburo@gmail.com">kazeburo@gmail.com</a>&gt;</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;POSIX::strftime::Compiler - GNU C library compatible strftime for loggers and servers</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

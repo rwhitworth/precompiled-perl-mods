@@ -1,0 +1,567 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>Path::Class::Dir - Objects representing directories</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Path::Class::Dir - Objects representing directories</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#version">VERSION</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Path::Class::Dir - Objects representing directories</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="version">VERSION</a></h1>
+<p>version 0.35</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use Path::Class;  # Exports dir() by default
+  
+  my $dir = dir('foo', 'bar');       # Path::Class::Dir object
+  my $dir = Path::Class::Dir-&gt;new('foo', 'bar');  # Same thing
+  
+  # Stringifies to 'foo/bar' on Unix, 'foo\bar' on Windows, etc.
+  print &quot;dir: $dir\n&quot;;
+  
+  if ($dir-&gt;is_absolute) { ... }
+  if ($dir-&gt;is_relative) { ... }
+  
+  my $v = $dir-&gt;volume; # Could be 'C:' on Windows, empty string
+                        # on Unix, 'Macintosh HD:' on Mac OS
+  
+  $dir-&gt;cleanup; # Perform logical cleanup of pathname
+  $dir-&gt;resolve; # Perform physical cleanup of pathname
+  
+  my $file = $dir-&gt;file('file.txt'); # A file in this directory
+  my $subdir = $dir-&gt;subdir('george'); # A subdirectory
+  my $parent = $dir-&gt;parent; # The parent directory, 'foo'
+  
+  my $abs = $dir-&gt;absolute; # Transform to absolute path
+  my $rel = $abs-&gt;relative; # Transform to relative path
+  my $rel = $abs-&gt;relative('/foo'); # Relative to /foo
+  
+  print $dir-&gt;as_foreign('Mac');   # :foo:bar:
+  print $dir-&gt;as_foreign('Win32'); #  foo\bar</pre>
+<pre>
+  # Iterate with IO::Dir methods:
+  my $handle = $dir-&gt;open;
+  while (my $file = $handle-&gt;read) {
+    $file = $dir-&gt;file($file);  # Turn into Path::Class::File object
+    ...
+  }
+  
+  # Iterate with Path::Class methods:
+  while (my $file = $dir-&gt;next) {
+    # $file is a Path::Class::File or Path::Class::Dir object
+    ...
+  }</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <code>Path::Class::Dir</code> class contains functionality for manipulating
+directory names in a cross-platform way.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="new" class="item">$dir = Path::Class::Dir-&gt;new( &lt;dir1&gt;, &lt;dir2&gt;, ... )</a></strong></dt>
+
+<dt><strong><a name="dir" class="item">$dir = dir( &lt;dir1&gt;, &lt;dir2&gt;, ... )</a></strong></dt>
+
+<dd>
+<p>Creates a new <code>Path::Class::Dir</code> object and returns it.  The
+arguments specify names of directories which will be joined to create
+a single directory object.  A volume may also be specified as the
+first argument, or as part of the first argument.  You can use
+platform-neutral syntax:</p>
+<pre>
+  my $dir = dir( 'foo', 'bar', 'baz' );</pre>
+<p>or platform-native syntax:</p>
+<pre>
+  my $dir = dir( 'foo/bar/baz' );</pre>
+<p>or a mixture of the two:</p>
+<pre>
+  my $dir = dir( 'foo/bar', 'baz' );</pre>
+<p>All three of the above examples create relative paths.  To create an
+absolute path, either use the platform native syntax for doing so:</p>
+<pre>
+  my $dir = dir( '/var/tmp' );</pre>
+<p>or use an empty string as the first argument:</p>
+<pre>
+  my $dir = dir( '', 'var', 'tmp' );</pre>
+<p>If the second form seems awkward, that's somewhat intentional - paths
+like <code>/var/tmp</code> or <code>\Windows</code> aren't cross-platform concepts in the
+first place (many non-Unix platforms don't have a notion of a &quot;root
+directory&quot;), so they probably shouldn't appear in your code if you're
+trying to be cross-platform.  The first form is perfectly natural,
+because paths like this may come from config files, user input, or
+whatever.</p>
+<p>As a special case, since it doesn't otherwise mean anything useful and
+it's convenient to define this way, <a href="#new"><code>Path::Class::Dir-&gt;new()</code></a> (or
+<a href="#dir"><code>dir()</code></a>) refers to the current directory (<code>File::Spec-&gt;curdir</code>).
+To get the current directory as an absolute path, do <a href="#dir"><code>&lt;
+dir()-</code></a>absolute &gt;&gt;.</p>
+<p>Finally, as another special case <a href="#dir"><code>dir(undef)</code></a> will return undef,
+since that's usually an accident on the part of the caller, and
+returning the root directory would be a nasty surprise just asking for
+trouble a few lines later.</p>
+</dd>
+<dt><strong><a name="stringify" class="item">$dir-&gt;stringify</a></strong></dt>
+
+<dd>
+<p>This method is called internally when a <code>Path::Class::Dir</code> object is
+used in a string context, so the following are equivalent:</p>
+<pre>
+  $string = $dir-&gt;stringify;
+  $string = &quot;$dir&quot;;</pre>
+</dd>
+<dt><strong><a name="volume" class="item">$dir-&gt;volume</a></strong></dt>
+
+<dd>
+<p>Returns the volume (e.g. <code>C:</code> on Windows, <code>Macintosh HD:</code> on Mac OS,
+etc.) of the directory object, if any.  Otherwise, returns the empty
+string.</p>
+</dd>
+<dt><strong><a name="basename" class="item">$dir-&gt;basename</a></strong></dt>
+
+<dd>
+<p>Returns the last directory name of the path as a string.</p>
+</dd>
+<dt><strong><a name="is_dir" class="item">$dir-&gt;is_dir</a></strong></dt>
+
+<dd>
+<p>Returns a boolean value indicating whether this object represents a
+directory.  Not surprisingly, <a href="../..//home/lithron/.cpan/build/Path-Class-0.35-35qrzv/blib/lib/Path/Class/File.html">the Path::Class::File manpage</a> objects always
+return false, and <code>Path::Class::Dir</code> objects always return true.</p>
+</dd>
+<dt><strong><a name="is_absolute" class="item">$dir-&gt;is_absolute</a></strong></dt>
+
+<dd>
+<p>Returns true or false depending on whether the directory refers to an
+absolute path specifier (like <code>/usr/local</code> or <code>\Windows</code>).</p>
+</dd>
+<dt><strong><a name="is_relative" class="item">$dir-&gt;is_relative</a></strong></dt>
+
+<dd>
+<p>Returns true or false depending on whether the directory refers to a
+relative path specifier (like <code>lib/foo</code> or <a href="#dir"><code>./dir</code></a>).</p>
+</dd>
+<dt><strong><a name="cleanup" class="item">$dir-&gt;cleanup</a></strong></dt>
+
+<dd>
+<p>Performs a logical cleanup of the file path.  For instance:</p>
+<pre>
+  my $dir = dir('/foo//baz/./foo')-&gt;cleanup;
+  # $dir now represents '/foo/baz/foo';</pre>
+</dd>
+<dt><strong><a name="resolve" class="item">$dir-&gt;resolve</a></strong></dt>
+
+<dd>
+<p>Performs a physical cleanup of the file path.  For instance:</p>
+<pre>
+  my $dir = dir('/foo//baz/../foo')-&gt;resolve;
+  # $dir now represents '/foo/foo', assuming no symlinks</pre>
+<p>This actually consults the filesystem to verify the validity of the
+path.</p>
+</dd>
+<dt><strong><a name="file" class="item">$file = $dir-&gt;file( &lt;dir1&gt;, &lt;dir2&gt;, ..., &lt;file&gt; )</a></strong></dt>
+
+<dd>
+<p>Returns a <a href="../..//home/lithron/.cpan/build/Path-Class-0.35-35qrzv/blib/lib/Path/Class/File.html">the Path::Class::File manpage</a> object representing an entry in <code>$dir</code>
+or one of its subdirectories.  Internally, this just calls <code>&lt;
+Path::Class::File-</code>new( @_ ) &gt;&gt;.</p>
+</dd>
+<dt><strong><a name="subdir" class="item">$subdir = $dir-&gt;subdir( &lt;dir1&gt;, &lt;dir2&gt;, ... )</a></strong></dt>
+
+<dd>
+<p>Returns a new <code>Path::Class::Dir</code> object representing a subdirectory
+of <code>$dir</code>.</p>
+</dd>
+<dt><strong><a name="parent" class="item">$parent = $dir-&gt;parent</a></strong></dt>
+
+<dd>
+<p>Returns the parent directory of <code>$dir</code>.  Note that this is the
+<em>logical</em> parent, not necessarily the physical parent.  It really
+means we just chop off entries from the end of the directory list
+until we cain't chop no more.  If the directory is relative, we start
+using the relative forms of parent directories.</p>
+<p>The following code demonstrates the behavior on absolute and relative
+directories:</p>
+<pre>
+  $dir = dir('/foo/bar');
+  for (1..6) {
+    print &quot;Absolute: $dir\n&quot;;
+    $dir = $dir-&gt;parent;
+  }
+  
+  $dir = dir('foo/bar');
+  for (1..6) {
+    print &quot;Relative: $dir\n&quot;;
+    $dir = $dir-&gt;parent;
+  }
+  
+  ########### Output on Unix ################
+  Absolute: /foo/bar
+  Absolute: /foo
+  Absolute: /
+  Absolute: /
+  Absolute: /
+  Absolute: /
+  Relative: foo/bar
+  Relative: foo
+  Relative: .
+  Relative: ..
+  Relative: ../..
+  Relative: ../../..</pre>
+</dd>
+<dt><strong><a name="children" class="item">@list = $dir-&gt;children</a></strong></dt>
+
+<dd>
+<p>Returns a list of <a href="../..//home/lithron/.cpan/build/Path-Class-0.35-35qrzv/blib/lib/Path/Class/File.html">the Path::Class::File manpage</a> and/or <code>Path::Class::Dir</code>
+objects listed in this directory, or in scalar context the number of
+such objects.  Obviously, it is necessary for <code>$dir</code> to
+exist and be readable in order to find its children.</p>
+<p>Note that the children are returned as subdirectories of <code>$dir</code>,
+i.e. the children of <em class="file">foo</em> will be <em class="file">foo/bar</em> and <em class="file">foo/baz</em>, not
+<em class="file">bar</em> and <em class="file">baz</em>.</p>
+<p>Ordinarily <a href="#children"><code>children()</code></a> will not include the <em>self</em> and <em>parent</em>
+entries <code>.</code> and <code>..</code> (or their equivalents on non-Unix systems),
+because that's like I'm-my-own-grandpa business.  If you do want all
+directory entries including these special ones, pass a true value for
+the <code>all</code> parameter:</p>
+<pre>
+  @c = $dir-&gt;children(); # Just the children
+  @c = $dir-&gt;children(all =&gt; 1); # All entries</pre>
+<p>In addition, there's a <code>no_hidden</code> parameter that will exclude all
+normally &quot;hidden&quot; entries - on Unix this means excluding all entries
+that begin with a dot (<code>.</code>):</p>
+<pre>
+  @c = $dir-&gt;children(no_hidden =&gt; 1); # Just normally-visible entries</pre>
+</dd>
+<dt><strong><a name="absolute" class="item">$abs = $dir-&gt;absolute</a></strong></dt>
+
+<dd>
+<p>Returns a <code>Path::Class::Dir</code> object representing <code>$dir</code> as an
+absolute path.  An optional argument, given as either a string or a
+<code>Path::Class::Dir</code> object, specifies the directory to use as the base
+of relativity - otherwise the current working directory will be used.</p>
+</dd>
+<dt><strong><a name="relative" class="item">$rel = $dir-&gt;relative</a></strong></dt>
+
+<dd>
+<p>Returns a <code>Path::Class::Dir</code> object representing <code>$dir</code> as a
+relative path.  An optional argument, given as either a string or a
+<code>Path::Class::Dir</code> object, specifies the directory to use as the base
+of relativity - otherwise the current working directory will be used.</p>
+</dd>
+<dt><strong><a name="subsumes" class="item">$boolean = $dir-&gt;<code>subsumes($other)</code></a></strong></dt>
+
+<dd>
+<p>Returns true if this directory spec subsumes the other spec, and false
+otherwise.  Think of &quot;subsumes&quot; as &quot;contains&quot;, but we only look at the
+<em>specs</em>, not whether <code>$dir</code> actually contains <code>$other</code> on the
+filesystem.</p>
+<p>The <code>$other</code> argument may be a <code>Path::Class::Dir</code> object, a
+<a href="../..//home/lithron/.cpan/build/Path-Class-0.35-35qrzv/blib/lib/Path/Class/File.html">the Path::Class::File manpage</a> object, or a string.  In the latter case, we
+assume it's a directory.</p>
+<pre>
+  # Examples:
+  dir('foo/bar' )-&gt;subsumes(dir('foo/bar/baz'))  # True
+  dir('/foo/bar')-&gt;subsumes(dir('/foo/bar/baz')) # True
+  dir('foo/bar' )-&gt;subsumes(dir('bar/baz'))      # False
+  dir('/foo/bar')-&gt;subsumes(dir('foo/bar'))      # False</pre>
+</dd>
+<dt><strong><a name="contains" class="item">$boolean = $dir-&gt;<code>contains($other)</code></a></strong></dt>
+
+<dd>
+<p>Returns true if this directory actually contains <code>$other</code> on the
+filesystem.  <code>$other</code> doesn't have to be a direct child of <code>$dir</code>,
+it just has to be subsumed.</p>
+</dd>
+<dt><strong><a name="as_foreign" class="item">$foreign = $dir-&gt;<code>as_foreign($type)</code></a></strong></dt>
+
+<dd>
+<p>Returns a <code>Path::Class::Dir</code> object representing <code>$dir</code> as it would
+be specified on a system of type <code>$type</code>.  Known types include
+<code>Unix</code>, <code>Win32</code>, <code>Mac</code>, <code>VMS</code>, and <code>OS2</code>, i.e. anything for which
+there is a subclass of <code>File::Spec</code>.</p>
+<p>Any generated objects (subdirectories, files, parents, etc.) will also
+retain this type.</p>
+</dd>
+<dt><strong><a name="new_foreign" class="item">$foreign = Path::Class::Dir-&gt;new_foreign($type, @args)</a></strong></dt>
+
+<dd>
+<p>Returns a <code>Path::Class::Dir</code> object representing <code>$dir</code> as it would
+be specified on a system of type <code>$type</code>.  Known types include
+<code>Unix</code>, <code>Win32</code>, <code>Mac</code>, <code>VMS</code>, and <code>OS2</code>, i.e. anything for which
+there is a subclass of <code>File::Spec</code>.</p>
+<p>The arguments in <code>@args</code> are the same as they would be specified in
+<a href="#new"><code>new()</code></a>.</p>
+</dd>
+<dt><strong><a name="dir_list" class="item">@list = $dir-&gt;dir_list([OFFSET, [LENGTH]])</a></strong></dt>
+
+<dd>
+<p>Returns the list of strings internally representing this directory
+structure.  Each successive member of the list is understood to be an
+entry in its predecessor's directory list.  By contract, <code>&lt;
+Path::Class-</code>new( $dir-&gt;dir_list ) &gt;&gt; should be equivalent to <code>$dir</code>.</p>
+<p>The semantics of this method are similar to Perl's <code>splice</code> or
+<code>substr</code> functions; they return <code>LENGTH</code> elements starting at
+<code>OFFSET</code>.  If <code>LENGTH</code> is omitted, returns all the elements starting
+at <code>OFFSET</code> up to the end of the list.  If <code>LENGTH</code> is negative,
+returns the elements from <code>OFFSET</code> onward except for <code>-LENGTH</code>
+elements at the end.  If <code>OFFSET</code> is negative, it counts backward
+<code>OFFSET</code> elements from the end of the list.  If <code>OFFSET</code> and
+<code>LENGTH</code> are both omitted, the entire list is returned.</p>
+<p>In a scalar context, <a href="#dir_list"><code>dir_list()</code></a> with no arguments returns the
+number of entries in the directory list; <a href="#dir_list"><code>dir_list(OFFSET)</code></a> returns
+the single element at that offset; <a href="#dir_list"><code>dir_list(OFFSET, LENGTH)</code></a> returns
+the final element that would have been returned in a list context.</p>
+</dd>
+<dt><strong><a name="components" class="item">$dir-&gt;components</a></strong></dt>
+
+<dd>
+<p>Identical to c&lt;dir_list()&gt;.  It exists because there's an analogous
+method <a href="#dir_list"><code>dir_list()</code></a> in the <code>Path::Class::File</code> class that also
+returns the basename string, so this method lets someone call
+<a href="#components"><code>components()</code></a> without caring whether the object is a file or a
+directory.</p>
+</dd>
+<dt><strong><a name="open" class="item">$fh = $dir-&gt;<code>open()</code></a></strong></dt>
+
+<dd>
+<p>Passes <code>$dir</code> to <a href="#open"><code>IO::Dir-&gt;open</code></a> and returns the result as an
+<a href="../../lib/perl5/5.14/x86_64-cygwin-threads/IO/Dir.html">the IO::Dir manpage</a> object.  If the opening fails, <code>undef</code> is returned and
+<code>$!</code> is set.</p>
+</dd>
+<dt><strong><a name="mkpath" class="item">$dir-&gt;mkpath($verbose, $mode)</a></strong></dt>
+
+<dd>
+<p>Passes all arguments, including <code>$dir</code>, to <a href="#mkpath"><code>File::Path::mkpath()</code></a> and returns the result (a list of all directories created).</p>
+</dd>
+<dt><strong><a name="rmtree" class="item">$dir-&gt;rmtree($verbose, $cautious)</a></strong></dt>
+
+<dd>
+<p>Passes all arguments, including <code>$dir</code>, to <a href="#rmtree"><code>File::Path::rmtree()</code></a> and returns the result (the number of files successfully deleted).</p>
+</dd>
+<dt><strong><a name="remove" class="item">$dir-&gt;<code>remove()</code></a></strong></dt>
+
+<dd>
+<p>Removes the directory, which must be empty.  Returns a boolean value
+indicating whether or not the directory was successfully removed.
+This method is mainly provided for consistency with
+<code>Path::Class::File</code>'s <a href="#remove"><code>remove()</code></a> method.</p>
+</dd>
+<dt><strong><a name="tempfile" class="item">$dir-&gt;tempfile(...)</a></strong></dt>
+
+<dd>
+<p>An interface to <a href="../../lib/perl5/5.14/File/Temp.html">the File::Temp manpage</a>'s <a href="#tempfile"><code>tempfile()</code></a> function.  Just like
+that function, if you call this in a scalar context, the return value
+is the filehandle and the file is <code>unlink</code>ed as soon as possible
+(which is immediately on Unix-like platforms).  If called in a list
+context, the return values are the filehandle and the filename.</p>
+<p>The given directory is passed as the <code>DIR</code> parameter.</p>
+<p>Here's an example of pretty good usage which doesn't allow race
+conditions, won't leave yucky tempfiles around on your filesystem,
+etc.:</p>
+<pre>
+  my $fh = $dir-&gt;tempfile;
+  print $fh &quot;Here's some data...\n&quot;;
+  seek($fh, 0, 0);
+  while (&lt;$fh&gt;) { do something... }</pre>
+<p>Or in combination with a <code>fork</code>:</p>
+<pre>
+  my $fh = $dir-&gt;tempfile;
+  print $fh &quot;Here's some more data...\n&quot;;
+  seek($fh, 0, 0);
+  if ($pid=fork()) {
+    wait;
+  } else {
+    something($_) while &lt;$fh&gt;;
+  }</pre>
+</dd>
+<dt><strong><a name="next" class="item">$dir_or_file = $dir-&gt;<code>next()</code></a></strong></dt>
+
+<dd>
+<p>A convenient way to iterate through directory contents.  The first
+time <a href="#next"><code>next()</code></a> is called, it will <a href="#open"><code>open()</code></a> the directory and read the
+first item from it, returning the result as a <code>Path::Class::Dir</code> or
+<a href="../..//home/lithron/.cpan/build/Path-Class-0.35-35qrzv/blib/lib/Path/Class/File.html">the Path::Class::File manpage</a> object (depending, of course, on its actual
+type).  Each subsequent call to <a href="#next"><code>next()</code></a> will simply iterate over the
+directory's contents, until there are no more items in the directory,
+and then the undefined value is returned.  For example, to iterate
+over all the regular files in a directory:</p>
+<pre>
+  while (my $file = $dir-&gt;next) {
+    next unless -f $file;
+    my $fh = $file-&gt;open('r') or die &quot;Can't read $file: $!&quot;;
+    ...
+  }</pre>
+<p>If an error occurs when opening the directory (for instance, it
+doesn't exist or isn't readable), <a href="#next"><code>next()</code></a> will throw an exception
+with the value of <code>$!</code>.</p>
+</dd>
+<dt><strong><a name="traverse" class="item">$dir-&gt;traverse( sub { ... }, @args )</a></strong></dt>
+
+<dd>
+<p>Calls the given callback for the root, passing it a continuation
+function which, when called, will call this recursively on each of its
+children. The callback function should be of the form:</p>
+<pre>
+  sub {
+    my ($child, $cont, @args) = @_;
+    # ...
+  }</pre>
+<p>For instance, to calculate the number of files in a directory, you
+can do this:</p>
+<pre>
+  my $nfiles = $dir-&gt;traverse(sub {
+    my ($child, $cont) = @_;
+    return sum($cont-&gt;(), ($child-&gt;is_dir ? 0 : 1));
+  });</pre>
+<p>or to calculate the maximum depth of a directory:</p>
+<pre>
+  my $depth = $dir-&gt;traverse(sub {
+    my ($child, $cont, $depth) = @_;
+    return max($cont-&gt;($depth + 1), $depth);
+  }, 0);</pre>
+<p>You can also choose not to call the callback in certain situations:</p>
+<pre>
+  $dir-&gt;traverse(sub {
+    my ($child, $cont) = @_;
+    return if -l $child; # don't follow symlinks
+    # do something with $child
+    return $cont-&gt;();
+  });</pre>
+</dd>
+<dt><strong><a name="traverse_if" class="item">$dir-&gt;traverse_if( sub { ... }, sub { ... }, @args )</a></strong></dt>
+
+<dd>
+<p>traverse with additional &quot;should I visit this child&quot; callback.
+Particularly useful in case examined tree contains inaccessible
+directories.</p>
+<p>Canonical example:</p>
+<pre>
+  $dir-&gt;traverse_if(
+    sub {
+       my ($child, $cont) = @_;
+       # do something with $child
+       return $cont-&gt;();
+    }, 
+    sub {
+       my ($child) = @_;
+       # Process only readable items
+       return -r $child;
+    });</pre>
+<p>Second callback gets single parameter: child. Only children for
+which it returns true will be processed by the first callback.</p>
+<p>Remaining parameters are interpreted as in traverse, in particular
+<a href="#traverse_if"><code>traverse_if(callback, sub { 1 }, @args</code></a> is equivalent to
+<a href="#traverse"><code>traverse(callback, @args)</code></a>.</p>
+</dd>
+<dt><strong><a name="recurse" class="item">$dir-&gt;recurse( callback =&gt; sub {...} )</a></strong></dt>
+
+<dd>
+<p>Iterates through this directory and all of its children, and all of
+its children's children, etc., calling the <code>callback</code> subroutine for
+each entry.  This is a lot like what the <a href="../../lib/perl5/5.14/File/Find.html">the File::Find manpage</a> module does,
+and of course <code>File::Find</code> will work fine on <a href="../..//home/lithron/.cpan/build/Path-Class-0.35-35qrzv/blib/lib/Path/Class.html">the Path::Class manpage</a> objects,
+but the advantage of the <a href="#recurse"><code>recurse()</code></a> method is that it will also feed
+your callback routine <code>Path::Class</code> objects rather than just pathname
+strings.</p>
+<p>The <a href="#recurse"><code>recurse()</code></a> method requires a <code>callback</code> parameter specifying
+the subroutine to invoke for each entry.  It will be passed the
+<code>Path::Class</code> object as its first argument.</p>
+<p><a href="#recurse"><code>recurse()</code></a> also accepts two boolean parameters, <code>depthfirst</code> and
+<code>preorder</code> that control the order of recursion.  The default is a
+preorder, breadth-first search, i.e. <code>depthfirst =&gt; 0, preorder =&gt; 1</code>.
+At the time of this writing, all combinations of these two parameters
+are supported <em>except</em> <code>depthfirst =&gt; 0, preorder =&gt; 0</code>.</p>
+<p><code>callback</code> is normally not required to return any value. If it
+returns special constant <code>Path::Class::Entity::PRUNE()</code> (more easily
+available as <code>$item-</code>PRUNE&gt;),  no children of analyzed
+item will be analyzed (mostly as if you set <code>$File::Find::prune=1</code>). Of course
+pruning is available only in <code>preorder</code>, in postorder return value
+has no effect.</p>
+</dd>
+<dt><strong><a name="stat" class="item">$st = $file-&gt;<code>stat()</code></a></strong></dt>
+
+<dd>
+<p>Invokes <a href="#stat"><code>File::stat::stat()</code></a> on this directory and returns a
+<code>File::stat</code> object representing the result.</p>
+</dd>
+<dt><strong><a name="lstat" class="item">$st = $file-&gt;<code>lstat()</code></a></strong></dt>
+
+<dd>
+<p>Same as <a href="#stat"><code>stat()</code></a>, but if <code>$file</code> is a symbolic link, <a href="#lstat"><code>lstat()</code></a>
+stats the link instead of the directory the link points to.</p>
+</dd>
+<dt><strong><a name="file_class" class="item">$class = $file-&gt;<code>file_class()</code></a></strong></dt>
+
+<dd>
+<p>Returns the class which should be used to create file objects.</p>
+<p>Generally overridden whenever this class is subclassed.</p>
+</dd>
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Ken Williams, <a href="mailto:kwilliams@cpan.org">kwilliams@cpan.org</a></p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../..//home/lithron/.cpan/build/Path-Class-0.35-35qrzv/blib/lib/Path/Class.html">the Path::Class manpage</a>, <a href="../..//home/lithron/.cpan/build/Path-Class-0.35-35qrzv/blib/lib/Path/Class/File.html">the Path::Class::File manpage</a>, <a href="../../lib/perl5/5.14/x86_64-cygwin-threads/File/Spec.html">the File::Spec manpage</a></p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;Path::Class::Dir - Objects representing directories</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

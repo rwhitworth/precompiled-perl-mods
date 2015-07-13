@@ -1,0 +1,122 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>HTML::Prototype::Helper::Tag - Defines a tag object needed by HTML::Prototype</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Prototype::Helper::Tag - Defines a tag object needed by HTML::Prototype</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#remarks">REMARKS</a></li>
+		<li><a href="#methods">METHODS</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#license">LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>HTML::Prototype::Helper::Tag - Defines a tag object needed by HTML::Prototype</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use HTML::Prototype::Helper;</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Defines a tag object needed by HTML::Prototype</p>
+<p>
+</p>
+<h2><a name="remarks">REMARKS</a></h2>
+<p>Until version 1.43, the internal function <em>$self-</em>_tag&gt; used <em>$tag-</em>as_XML&gt;
+as its return value. By now, it will use <em>$tag-</em>as_HTML( $entities )&gt; to
+invokee <em>HTML::Entities::encode_entities</em>. This behaviour can be overridden
+by setting <em>$HTML::Prototype::Helper::Tag::USE_ASXML_FOR_TAG</em> to 1.</p>
+<p>
+</p>
+<h2><a name="methods">METHODS</a></h2>
+<dl>
+<dt><strong><a name="new" class="item">HTML::Prototype::Helper::Tag-&gt;new( $object_name, $method_name, $template_object, $local_binding, $object )</a></strong></dt>
+
+<dt><strong><a name="object_name" class="item">$tag-&gt;object_name( [$object_name] )</a></strong></dt>
+
+<dt><strong><a name="method_name" class="item">$tag-&gt;method_name( [$method_name] )</a></strong></dt>
+
+<dt><strong><a name="template_object" class="item">$tag-&gt;template_object( [$template_object] )</a></strong></dt>
+
+<dt><strong><a name="local_binding" class="item">$tag-&gt;local_binding( [$local_binding] )</a></strong></dt>
+
+<dt><strong><a name="object" class="item">$tag-&gt;object( [$object] )</a></strong></dt>
+
+<dt><strong><a name="value" class="item">$tag-&gt;value( )</a></strong></dt>
+
+<dt><strong><a name="value_before_type_cast" class="item">$tag-&gt;value_before_type_cast( )</a></strong></dt>
+
+<dt><strong><a name="to_input_field_tag" class="item">$tag-&gt;to_input_field_tag( $field_type, \%options )</a></strong></dt>
+
+<dt><strong><a name="to_content_tag" class="item">$tag-&gt;to_content_tag( $tag_name, $value, \%options )</a></strong></dt>
+
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../..//home/lithron/.cpan/build/HTML-Prototype-1.48-BysgwA/blib/lib/HTML/Prototype.html">the HTML::Prototype manpage</a>, <a href="http://prototype.conio.net/">http://prototype.conio.net/</a></p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Sascha Kiefer, <code>esskar@cpan.org</code></p>
+<p>Built around Prototype by Sam Stephenson.
+Much code is ported from Ruby on Rails javascript helpers.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This library is free software. You can redistribute it and/or modify it under
+the same terms as perl itself.</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Prototype::Helper::Tag - Defines a tag object needed by HTML::Prototype</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,623 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>HTML::Prototype - Generate HTML and Javascript for the Prototype library</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Prototype - Generate HTML and Javascript for the Prototype library</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#methods">METHODS</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#thank_you">THANK YOU</a></li>
+	<li><a href="#license">LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>HTML::Prototype - Generate HTML and Javascript for the Prototype library</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use HTML::Prototype;</pre>
+<pre>
+    my $prototype = HTML::Prototype-&gt;new;
+    print $prototype-&gt;auto_complete_field(...);
+    print $prototype-&gt;auto_complete_result(...);
+    print $prototype-&gt;auto_complete_stylesheet(...);
+    print $prototype-&gt;content_tag(...);
+    print $prototype-&gt;define_javascript_functions;
+    print $prototype-&gt;draggable_element(...);
+    print $prototype-&gt;drop_receiving_element(...);
+    print $prototype-&gt;evaluate_remote_response(...);
+    print $prototype-&gt;form_remote_tag(...);
+    print $prototype-&gt;in_place_editor(...);
+    print $prototype-&gt;in_place_editor_field(...);
+    print $prototype-&gt;in_place_editor_stylesheet(...);
+    print $prototype-&gt;javascript_tag(...);
+    print $prototype-&gt;link_to_function(...);
+    print $prototype-&gt;link_to_remote(...);
+    print $prototype-&gt;observe_field(...);
+    print $prototype-&gt;observe_form(...);
+    print $prototype-&gt;periodically_call_remote(...);
+    print $prototype-&gt;sortable_element(...);
+    print $prototype-&gt;submit_to_remote(...);
+    print $prototype-&gt;tag(...);
+    print $prototype-&gt;text_field_with_auto_complete(...);
+    print $prototype-&gt;update_element_function(...);
+    print $prototype-&gt;visual_effect(...);</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The module contains some code generators for Prototype, the famous JavaScript
+OO library and the script.aculous extensions.</p>
+<p>The Prototype library (http://prototype.conio.net/) is designed to make
+AJAX easy.  Catalyst::Plugin::Prototype makes it easy to connect to the
+Prototype library.</p>
+<p>This is mostly a port of the Ruby on Rails helper tags for JavaScript
+for use in <em>Catalyst</em>.</p>
+<p>
+</p>
+<h2><a name="methods">METHODS</a></h2>
+<dl>
+<dt><strong><a name="in_place_editor" class="item">$prototype-&gt;in_place_editor( $field_id, \%options )</a></strong></dt>
+
+<dd>
+<p>Makes an HTML element specified by the DOM ID <code>$field_id</code> become an in-place
+editor of a property.</p>
+<p>A form is automatically created and displayed when the user clicks the element,
+something like this:</p>
+<pre>
+        &lt;form id=&quot;myElement-in-place-edit-form&quot; target=&quot;specified url&quot;&gt;
+                &lt;input name=&quot;value&quot; text=&quot;The content of myElement&quot;/&gt;
+                &lt;input type=&quot;submit&quot; value=&quot;ok&quot;/&gt;
+                &lt;a onClick=&quot;javascript to cancel the editing&quot;&gt;cancel&lt;/a&gt;
+        &lt;/form&gt;</pre>
+<p>The form is serialized and sent to the server using an Ajax call, the action
+on the server should process the value and return the updated value in the
+body of the reponse. The element will automatically be updated with the
+changed value (as returned from the server).</p>
+<p>Required options are:</p>
+<p><a href="#url"><code>url</code></a>: Specifies the url where the updated value should be sent after the
+user presses &quot;ok&quot;.</p>
+<p>Addtional options are:</p>
+<p><code>rows</code>: Number of rows (more than 1 will use a TEXTAREA)</p>
+<p><code>cols</code>: The number of columns the text area should span (works for both single line or multi line).</p>
+<p><code>size</code>: Synonym for ‘cols’ when using single-line (rows=1) input</p>
+<p><code>cancel_text</code>: The text on the cancel link. (default: &quot;cancel&quot;)</p>
+<p><code>form_class_name</code>: CSS class used for the in place edit form. (default: &quot;inplaceeditor-form&quot;)</p>
+<p><code>save_text</code>: The text on the save link. (default: &quot;ok&quot;)</p>
+<p><code>saving_class_name</code>: CSS class added to the element while displaying &quot;Saving...&quot;
+(removed when server responds). (default: &quot;inplaceeditor-saving&quot;)</p>
+<p><code>load_text_url</code>: Will cause the text to be loaded from the server (useful if
+your text is actually textile and formatted on the server)</p>
+<p><code>loading_text</code>: If the <code>load_text_url</code> option is specified then this text is
+displayed while the text is being loaded from the server. (default: &quot;Loading...&quot;)</p>
+<p><code>click_to_edit_text</code>: The text on the click-to-edit link. (default: &quot;click to edit&quot;)</p>
+<p><code>external_control</code>: The id of an external control used to enter edit mode.</p>
+<p><code>ajax_options</code>: Pass through options to the AJAX call (see prototype's Ajax.Updater)</p>
+<p><code>with</code>: JavaScript snippet that should return what is to be sent in the
+Ajax call, <code>form</code> and <code>value</code> are implicit parameters</p>
+</dd>
+<dt><strong><a name="in_place_editor_field" class="item">$prototype-&gt;in_place_editor_field( $object, $method, \%tag_options, \%in_place_editor_options )</a></strong></dt>
+
+<dd>
+<p>Renders the value of the specified object and method with in-place editing capabilities.</p>
+</dd>
+<dt><strong><a name="in_place_editor_stylesheet" class="item">$prototype-&gt;in_place_editor_stylesheet</a></strong></dt>
+
+<dd>
+<p>Returns the in_place_editor stylesheet.</p>
+</dd>
+<dt><strong><a name="auto_complete_field" class="item">$prototype-&gt;auto_complete_field( $field_id, \%options )</a></strong></dt>
+
+<dd>
+<p>Adds Ajax autocomplete functionality to the text input field with the
+DOM ID specified by <code>$field_id</code>.</p>
+<p>This function expects that the called action returns a HTML &lt;ul&gt; list,
+or nothing if no entries should be displayed for autocompletion.</p>
+<p>Required options are:</p>
+<p><a href="#url"><code>url</code></a>: Specifies the URL to be used in the AJAX call.</p>
+<pre>
+
+Addtional options are:</pre>
+<p><code>update</code>: Specifies the DOM ID of the element whose  innerHTML should
+be updated with the autocomplete entries returned by the Ajax request.
+Defaults to field_id + '_auto_complete'.</p>
+<p><code>with</code>: A Javascript expression specifying the parameters for the
+XMLHttpRequest.
+This defaults to 'value', which in the evaluated context refers to the
+new field value.</p>
+<p><code>indicator</code>: Specifies the DOM ID of an elment which will be displayed
+Here's an example using <a href="../Catalyst/View/Mason.html">the Catalyst::View::Mason manpage</a> with an indicator against the auto_complete_result example below on the server side.  Notice the 'style=&quot;display:none&quot;' in the indicator &lt;span&gt;.</p>
+<pre>
+        &lt;% $c-&gt;prototype-&gt;define_javascript_functions %&gt;</pre>
+<pre>
+        &lt;form action=&quot;/bar&quot; method=&quot;post&quot; id=&quot;baz&quot;&gt;
+        &lt;fieldset&gt;
+                &lt;legend&gt;Type search terms&lt;/legend&gt;
+                &lt;label for=&quot;acomp&quot;&gt;&lt;span class=&quot;field&quot;&gt;Search:&lt;/span&gt;&lt;/label&gt;
+                &lt;input type=&quot;text&quot; name=&quot;acomp&quot; id=&quot;acomp&quot;/&gt;
+                &lt;span style=&quot;display:none&quot; id=&quot;acomp_stat&quot;&gt;Searching...&lt;/span&gt;&lt;br /&gt;
+        &lt;/fieldset&gt;
+        &lt;/form&gt;</pre>
+<pre>
+        &lt;span id=&quot;acomp_auto_complete&quot;&gt;&lt;/span&gt;&lt;br/&gt;</pre>
+<pre>
+        &lt;% $c-&gt;prototype-&gt;auto_complete_field( 'acomp', { url =&gt; '/autocomplete', indicator =&gt; 'acomp_stat' } ) %&gt;</pre>
+<p>while autocomplete is running.</p>
+<p><code>tokens</code>: A  string or an array of strings containing separator tokens for
+tokenized incremental autocompletion. Example: <code>&lt;tokens =</code> ','&gt;&gt; would
+allow multiple autocompletion entries, separated by commas.</p>
+<p><code>min_chars</code>: The minimum number of characters that should be in the input
+field before an Ajax call is made to the server.</p>
+<p><code>on_hide</code>: A Javascript expression that is called when the autocompletion
+div is hidden. The expression should take two variables: element and update.
+Element is a DOM element for the field, update is a DOM element for the div
+from which the innerHTML is replaced.</p>
+<p><code>on_show</code>: Like on_hide, only now the expression is called then the div
+is shown.</p>
+<p><code>select</code>: Pick the class of the element from which the value for
+insertion should be extracted. If this is not specified,
+the entire element is used</p>
+<pre>
+
+=cut</pre>
+<p>sub auto_complete_field {
+    my ( $self, $id, $options ) = @_;</p>
+<pre>
+    my %to_options = (
+        'on_show'   =&gt; 'onShow',
+        'on_hide'   =&gt; 'onHide',
+        'min_chars' =&gt; 'minChars',
+        'indicator' =&gt; \'indicator',
+        'select'    =&gt; \'select',
+    );
+    $options ||= {};
+    my $update = ( $options-&gt;{update} || &quot;$id&quot; ) . '_auto_complete';
+    my $function =
+      &quot;new Ajax.Autocompleter( '$id', '$update', '&quot;
+      . ( $options-&gt;{url} || '' ) . &quot;'&quot;;</pre>
+<pre>
+    my $js_options = _options_to_js_options( \%to_options, $options );
+    $js_options-&gt;{tokens} =
+      _array_or_string_for_javascript( $options-&gt;{tokens} )
+      if $options-&gt;{tokens};
+    $js_options-&gt;{callback} =
+      ( 'function ( element, value ) { return ' . $options-&gt;{with} . ' }' )
+      if $options-&gt;{with};</pre>
+<pre>
+    $function .= ', ' . _options_for_javascript($js_options)
+      if keys %{$js_options};
+    $function .= ' )';</pre>
+<pre>
+    return $self-&gt;javascript_tag($function);
+}</pre>
+</dd>
+<dt><strong><a name="auto_complete_result" class="item">$prototype-&gt;auto_complete_result(\@items, $fieldname, [$phrase])</a></strong></dt>
+
+<dd>
+<p>Returns a list, to communcate with the Autocompleter.</p>
+<p>Here's an example for <em>Catalyst</em>:</p>
+<pre>
+    sub autocomplete : Global {
+        my ( $self, $c ) = @_;
+        my @items = qw/foo bar baz/;
+        $c-&gt;res-&gt;body( $c-&gt;prototype-&gt;auto_complete_result(\@items) );
+    }</pre>
+</dd>
+<dt><strong><a name="text_field_with_auto_complete" class="item">$prototype-&gt;text_field_with_auto_complete($method, [\%tag_options], [\%completion_options])</a></strong></dt>
+
+<dd>
+<p>Wrapper for text_field with added Ajax autocompletion functionality.</p>
+<p>In your controller, you'll need to define an action called
+auto_complete_for_object_method to respond the AJAX calls,</p>
+</dd>
+<dt><strong><a name="auto_complete_stylesheet" class="item">$prototype-&gt;auto_complete_stylesheet</a></strong></dt>
+
+<dd>
+<p>Returns the auto_complete stylesheet.</p>
+</dd>
+<dt><strong><a name="content_tag" class="item">$prototype-&gt;content_tag( $name, $content, \%html_options )</a></strong></dt>
+
+<dd>
+<p>Returns a block with opening tag, content, and ending tag. Useful for
+autogenerating tags like <strong>&lt;a href=&quot;http://catalyst.perl.org&quot;</strong>Catalyst
+Homepage&lt;/a&gt;&gt;. The first parameter is the tag name, i.e. <strong>'a'</strong> or
+<strong>'img'</strong>.</p>
+</dd>
+<dt><strong><a name="text_field" class="item">$prototype-&gt;text_field( $name, $method, $html_options )</a></strong></dt>
+
+<dd>
+<p>Returns an input tag of the &quot;text&quot; type tailored for accessing a specified
+attribute (identified by <em>$method</em>) on an object assigned to the template
+(identified by <em>$object</em>). Additional options on the input tag can be passed
+as a hash ref with <em>$html_options</em>.</p>
+</dd>
+<dt><strong><a name="define_javascript_functions" class="item">$prototype-&gt;define_javascript_functions</a></strong></dt>
+
+<dd>
+<p>Returns the library of JavaScript functions and objects, in a script block.</p>
+<p>Notes for <em>Catalyst</em> users:</p>
+<p>You can use <code>script/myapp_create.pl Prototype</code> to generate a static JavaScript
+file which then can be included via remote <code>script</code> tag.</p>
+</dd>
+<dt><strong><a name="draggable_element" class="item">$prototype-&gt;draggable_element( $element_id, \%options )</a></strong></dt>
+
+<dd>
+<p>Makes the element with the DOM ID specified by <code>element_id</code> draggable.</p>
+<p>Example:</p>
+<pre>
+    $prototype-&gt;draggable_element( 'my_image', { revert =&gt; 'true' } );</pre>
+<p>The available options are:</p>
+<dl>
+<dt><strong><a name="handle" class="item">handle</a></strong></dt>
+
+<dd>
+<p>Default: none. Sets whether the element should only be draggable by an
+embedded handle. The value is a string referencing a CSS class. The
+first child/grandchild/etc. element found within the element that has
+this CSS class will be used as the handle.</p>
+</dd>
+<dt><strong><a name="revert" class="item">revert</a></strong></dt>
+
+<dd>
+<p>Default: false. If set to true, the element returns to its original
+position when the drags ends.</p>
+</dd>
+<dt><strong><a name="constraint" class="item">constraint</a></strong></dt>
+
+<dd>
+<p>Default: none. If set to 'horizontal' or 'vertical' the drag will be
+constrained to take place only horizontally or vertically.</p>
+</dd>
+<dt><strong><a name="change" class="item">change</a></strong></dt>
+
+<dd>
+<p>Javascript callback function called whenever the Draggable is moved by
+dragging. It should be a string whose contents is a valid JavaScript
+function definition. The called function gets the Draggable instance
+as its parameter. It might look something like this:</p>
+<pre>
+    'function (element) { // do something with dragged element }'</pre>
+</dd>
+</dl>
+<p>See <a href="http://script.aculo.us">http://script.aculo.us</a> for more documentation.</p>
+</dd>
+<dt><strong><a name="drop_receiving_element" class="item">$prototype-&gt;drop_receiving_element( $element_id, \%options )</a></strong></dt>
+
+<dd>
+<p>Makes the element with the DOM ID specified by <code>element_id</code> receive
+dropped draggable elements (created by draggable_element).</p>
+<p>And make an AJAX call.</p>
+<p>By default, the action called gets the DOM ID of the element as parameter.</p>
+<p>Example:
+    $prototype-&gt;drop_receiving_element(
+      'my_cart', { url =&gt; 'http://foo.bar/add' } );</p>
+<p>Required options are:</p>
+<dl>
+<dt><strong><a name="url" class="item">url</a></strong></dt>
+
+<dd>
+<p>The URL for the AJAX call.</p>
+</dd>
+</dl>
+<p>Additional options are:</p>
+<dl>
+<dt><strong><a name="accept" class="item">accept</a></strong></dt>
+
+<dd>
+<p>Default: none. Set accept to a string or an array of
+strings describing CSS classes. The Droppable will only accept
+Draggables that have one or more of these CSS classes.</p>
+</dd>
+<dt><strong><a name="containment" class="item">containment</a></strong></dt>
+
+<dd>
+<p>Default: none. The droppable will only accept the Draggable if the
+Draggable is contained in the given elements (or element ids). Can be a
+single element or an array of elements. This is option is used by
+Sortables to control Drag-and-Drop between Sortables.</p>
+</dd>
+<dt><strong><a name="overlap" class="item">overlap</a></strong></dt>
+
+<dd>
+<p>Default: none. If set to 'horizontal' or 'vertical' the droppable will
+only react to a Draggable if it overlaps by more than 50% in the given
+direction. Used by Sortables.</p>
+<p>Additionally, the following JavaScript callback functions can be used
+in the option parameter:</p>
+</dd>
+<dt><strong><a name="onhover" class="item">onHover</a></strong></dt>
+
+<dd>
+<p>Javascript function called whenever a Draggable is moved over the
+Droppable and the Droppable is affected (would accept it). The
+callback gets three parameters: the Draggable, the Droppable element,
+and the percentage of overlapping as defined by the overlap
+option. Used by Sortables. The function might look something like
+this:</p>
+<pre>
+    'function (draggable, droppable, pcnt) { // do something }'</pre>
+</dd>
+</dl>
+<p>See <a href="http://script.aculo.us">http://script.aculo.us</a> for more documentation.</p>
+</dd>
+<dt><strong><a name="evaluate_remote_response" class="item">$prototype-&gt;evaluate_remote_response</a></strong></dt>
+
+<dd>
+<p>Returns 'eval(request.responseText)' which is the Javascript function
+that form_remote_tag can call in :complete to evaluate a multiple
+update return document using update_element_function calls.</p>
+</dd>
+<dt><strong><a name="form_remote_tag" class="item">$prototype-&gt;<code>form_remote_tag(\%options)</code></a></strong></dt>
+
+<dd>
+<p>Returns a form tag that will submit in the background using XMLHttpRequest,
+instead of the regular reloading POST arrangement.</p>
+<p>Even though it is using JavaScript to serialize the form elements, the
+form submission will work just like a regular submission as viewed by
+the receiving side.</p>
+<p>The options for specifying the target with <a href="#url"><code>url</code></a> and defining callbacks
+are the same as <a href="#link_to_remote"><code>link_to_remote</code></a>.</p>
+</dd>
+<dt><strong><a name="javascript_tag" class="item">$prototype-&gt;javascript_tag( $content, \%html_options )</a></strong></dt>
+
+<dd>
+<p>Returns a javascript block with opening tag, content and ending tag.</p>
+</dd>
+<dt><strong><a name="link_to_function" class="item">$prototype-&gt;link_to_function( $name, $function, \%html_options )</a></strong></dt>
+
+<dd>
+<p>Returns a link that will trigger a JavaScript function using the onClick
+handler and return false after the fact.</p>
+<p>Examples:</p>
+<pre>
+    $prototype-&gt;link_to_function( &quot;Greeting&quot;, &quot;alert('Hello world!') )
+    $prototype-&gt;link_to_function( '&lt;img src=&quot;really.png&quot;/&gt;', 'do_delete()', { entities =&gt; '' } )</pre>
+</dd>
+<dt><strong><a name="link_to_remote" class="item">$prototype-&gt;link_to_remote( $content, \%options, \%html_options )</a></strong></dt>
+
+<dd>
+<p>Returns a link to a remote action defined by options <a href="#url"><code>url</code></a> that's
+called in the background using XMLHttpRequest.</p>
+<p>The result of that request can then be inserted into a DOM object whose
+id can be specified with options-&gt;{update}.</p>
+<p>Examples:</p>
+<pre>
+    $prototype-&gt;link_to_remote( 'Delete', {
+        update =&gt; 'posts',
+        url    =&gt; '<a href="http://localhost/posts/">http://localhost/posts/</a>'
+    } )</pre>
+<pre>
+    $prototype-&gt;link_to_remote( '&lt;img src=&quot;refresh.png&quot;/&gt;', {
+        update =&gt; 'emails',
+        url    =&gt; '<a href="http://localhost/refresh/">http://localhost/refresh/</a>'
+    } )</pre>
+<p>By default, these remote requests are processed asynchronously, during
+which various callbacks can be triggered (e.g. for progress indicators
+and the like).</p>
+<p>Example:</p>
+<pre>
+    $prototype-&gt;link_to_remote( 'count', {
+        url =&gt; '<a href="http://localhost/count/">http://localhost/count/</a>',
+        complete =&gt; 'doStuff(request)'
+    } )</pre>
+<p>The callbacks that may be specified are:</p>
+<p><code>loading</code>: Called when the remote document is being loaded with data
+by the browser.</p>
+<p><code>loaded</code>: Called when the browser has finished loading the remote document.</p>
+<p><code>interactive</code>: Called when the user can interact with the remote document,
+even though it has not finished loading.</p>
+<p><code>complete</code>: Called when the XMLHttpRequest is complete.</p>
+<p>If you do need synchronous processing
+(this will block the browser while the request is happening),
+you can specify $options-&gt;{type} = 'synchronous'.</p>
+<p>You can customize further browser side call logic by passing
+in Javascript code snippets via some optional parameters. In
+their order of use these are:</p>
+<p><code>confirm</code>: Adds confirmation dialog.</p>
+<p><code>condition</code>:  Perform remote request conditionally by this expression.
+Use this to describe browser-side conditions when request should not be
+initiated.</p>
+<p><code>before</code>: Called before request is initiated.</p>
+<p><code>after</code>: Called immediately after request was initiated and before <code>loading</code>.</p>
+</dd>
+<dt><strong><a name="observe_field" class="item">$prototype-&gt;observe_field( $id, \%options)</a></strong></dt>
+
+<dd>
+<p>Observes the field with the DOM ID specified by $id and makes an
+Ajax when its contents have changed.</p>
+<p>Required options are:</p>
+<p><code>frequency</code>: The frequency (in seconds) at which changes to this field
+will be detected.</p>
+<p><a href="#url"><code>url</code></a>: url to be called when field content has changed.</p>
+<p>Additional options are:</p>
+<p><code>update</code>: Specifies the DOM ID of the element whose innerHTML
+should be updated with the XMLHttpRequest response text.</p>
+<p><code>with</code>: A JavaScript expression specifying the parameters for the
+XMLHttpRequest.
+This defaults to value, which in the evaluated context refers to the
+new field value.</p>
+<p>Additionally, you may specify any of the options documented in
+<a href="#link_to_remote"><code>link_to_remote</code></a>.</p>
+<p>Example TT2 template in <em>Catalyst</em>:</p>
+<pre>
+    [% c.prototype.define_javascript_functions %]
+    &lt;h1&gt;[% page.title %]&lt;/h1&gt;
+    &lt;div id=&quot;view&quot;&gt;&lt;/div&gt;
+    &lt;textarea id=&quot;editor&quot; rows=&quot;24&quot; cols=&quot;80&quot;&gt;[% page.body %]&lt;/textarea&gt;
+    [% url = base _ 'edit/' _ page.title %]
+    [% c.prototype.observe_field( 'editor', {
+        url    =&gt; url,
+        with   =&gt; &quot;'body='+value&quot;,
+        update =&gt; 'view'
+    } ) %]</pre>
+</dd>
+<dt><strong><a name="observe_form" class="item">$prototype-&gt;observe_form( $id, \%options )</a></strong></dt>
+
+<dd>
+<p>Like <a href="#observe_field"><code>observe_field</code></a>, but operates on an entire form identified by
+the DOM ID $id.</p>
+<p>Options are the same as <a href="#observe_field"><code>observe_field</code></a>, except the default value of
+the <code>with</code> option evaluates to the serialized (request string) value
+of the form.</p>
+</dd>
+<dt><strong><a name="periodically_call_remote" class="item">$prototype-&gt;periodically_call_remote( \%options )</a></strong></dt>
+
+<dd>
+<p>Periodically calls the specified url $options-&gt;{url}  every
+$options-&gt;{frequency} seconds (default is 10).</p>
+<p>Usually used to update a specified div $options-&gt;{update} with the
+results of the remote call.</p>
+<p>The options for specifying the target with <a href="#url"><code>url</code></a> and defining
+callbacks is the same as <a href="#link_to_remote"><code>link_to_remote</code></a>.</p>
+</dd>
+<dt><strong><a name="sortable_element" class="item">$prototype-&gt;sortable_element( $element_id, \%options )</a></strong></dt>
+
+<dd>
+<p>Makes the element with the DOM ID specified by <code>$element_id</code> sortable
+by drag-and-drop and make an Ajax call whenever the sort order has
+changed. By default, the action called gets the serialized sortable
+element as parameters.</p>
+<p>Example:
+    $prototype-&gt;sortable_element( 'my_list', { url =&gt; 'http://foo.bar/baz' } );</p>
+<p>In the example, the action gets a &quot;my_list&quot; array parameter
+containing the values of the ids of elements the sortable consists
+of, in the current order.</p>
+<p>You can change the behaviour with various options, see
+<a href="http://script.aculo.us">http://script.aculo.us</a> for more documentation.</p>
+</dd>
+<dt><strong><a name="submit_to_remote" class="item">$prototype-&gt;submit_to_remote( $name, $value, \%options )</a></strong></dt>
+
+<dd>
+<p>Returns a button input tag that will submit a form using XMLHttpRequest
+in the background instead of a typical reloading via POST.</p>
+<p><code>options</code> argument is the same as in <a href="#form_remote_tag"><code>form_remote_tag</code></a></p>
+</dd>
+<dt><strong><a name="tag" class="item">$prototype-&gt;tag( $name, \%options, $starttag );</a></strong></dt>
+
+<dd>
+<p>Returns a opening tag.</p>
+</dd>
+<dt><strong><a name="update_element_function" class="item">$prototype-&gt;update_element_function( $element_id, \%options, \&amp;code )</a></strong></dt>
+
+<dd>
+<p>Returns a Javascript function (or expression) that'll update a DOM element
+according to the options passed.</p>
+<p><code>content</code>: The content to use for updating.
+Can be left out if using block, see example.</p>
+<p><code>action</code>: Valid options are <code>update</code> (assumed by default), :empty, :remove</p>
+<p><code>position</code>: If the :action is :update, you can optionally specify one
+of the following positions: :before, :top, :bottom, :after.</p>
+<p>Example:
+    $prototype-&gt;javascript_tag( $prototype-&gt;update_element_function(
+        'products', { position =&gt; 'bottom', content =&gt; '&lt;p&gt;New product!&lt;/p&gt;'
+    ) );</p>
+<p>This method can also be used in combination with remote method call
+where the result is evaluated afterwards to cause multiple updates
+on a page.</p>
+<p>Example:
+     # View
+    $prototype-&gt;form_remote_tag( {
+        url      =&gt; { &quot;http://foo.bar/buy&quot; },
+        complete =&gt; $prototype-&gt;evaluate_remote_response
+    } );</p>
+<pre>
+    # Returning view
+    $prototype-&gt;update_element_function( 'cart', {
+        action   =&gt; 'update',
+        position =&gt; 'bottom',
+        content  =&gt; &quot;&lt;p&gt;New Product: $product_name&lt;/p&gt;&quot;
+    } );
+    $prototype-&gt;update_element_function( 'status',
+        { binding =&gt; &quot;You've bought a new product!&quot; } );</pre>
+</dd>
+<dt><strong><a name="visual_effect" class="item">$prototype-&gt;visual_effect( $name, $element_id, \%js_options )</a></strong></dt>
+
+<dd>
+<p>Returns a JavaScript snippet to be used on the Ajax callbacks for starting
+visual effects.</p>
+<pre>
+    $prototype-&gt;link_to_remote( 'Reload', {
+        update   =&gt; 'posts',
+        url      =&gt; '<a href="http://foo.bar/baz">http://foo.bar/baz</a>',
+        complete =&gt; $prototype-&gt;visual_effect( 'highlight', 'posts', {
+            duration =&gt; '0.5'
+        } )
+    } );</pre>
+</dd>
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../Catalyst/Plugin/Prototype.html">the Catalyst::Plugin::Prototype manpage</a>, <em>Catalyst</em>.
+<a href="http://prototype.conio.net/">http://prototype.conio.net/</a></p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Sascha Kiefer, <code>esskar@cpan.org</code>
+Sebastian Riedel, <code>sri@oook.de</code>
+Marcus Ramberg, <code>mramberg@cpan.org</code></p>
+<p>Built around Prototype by Sam Stephenson.
+Much code is ported from Ruby on Rails javascript helpers.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="thank_you">THANK YOU</a></h1>
+<p>Drew Taylor, Leon Brocard, Andreas Marienborg</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This library is free software. You can redistribute it and/or modify it under
+the same terms as perl itself.</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Prototype - Generate HTML and Javascript for the Prototype library</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Base.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/Unix.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/VMS.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/Windows.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/Windows/BCC.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/Windows/GCC.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/Windows/MSVC.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/aix.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/android.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/cygwin.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/darwin.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/dec_osf.pm
+/home/lithron/perl5/lib/perl5/ExtUtils/CBuilder/Platform/os2.pm
+/home/lithron/perl5/man/man3/ExtUtils.CBuilder.3pm
+/home/lithron/perl5/man/man3/ExtUtils.CBuilder.Platform.Windows.3pm

@@ -1,0 +1,8 @@
+/home/lithron/perl5/lib/perl5/B/Hooks/EndOfScope.pm
+/home/lithron/perl5/lib/perl5/B/Hooks/EndOfScope/PP.pm
+/home/lithron/perl5/lib/perl5/B/Hooks/EndOfScope/PP/FieldHash.pm
+/home/lithron/perl5/lib/perl5/B/Hooks/EndOfScope/PP/HintHash.pm
+/home/lithron/perl5/lib/perl5/B/Hooks/EndOfScope/XS.pm
+/home/lithron/perl5/man/man3/B.Hooks.EndOfScope.3pm
+/home/lithron/perl5/man/man3/B.Hooks.EndOfScope.PP.3pm
+/home/lithron/perl5/man/man3/B.Hooks.EndOfScope.XS.3pm

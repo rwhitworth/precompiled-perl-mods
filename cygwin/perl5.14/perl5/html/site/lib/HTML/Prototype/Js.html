@@ -1,0 +1,306 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<title>HTML::Prototype::Js - prototype library, embedded in perl</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Prototype::Js - prototype library, embedded in perl</span></strong></big>
+</td></tr>
+</table>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#new_syntax">NEW SYNTAX</a></li>
+	<li><a href="#js_objects">JS OBJECTS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#license">LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>HTML::Prototype::Js - prototype library, embedded in perl</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    our $prototype = do { package HTML::Prototype::Js; local $/; &lt;DATA&gt; };</pre>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This is the actual Prototype library embedded in a perl __DATA__
+section, for easy inclusion in <a href="../..//home/lithron/.cpan/build/HTML-Prototype-1.48-BysgwA/blib/lib/HTML/Prototype.html">the HTML::Prototype manpage</a>.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="new_syntax">NEW SYNTAX</a></h1>
+<p>The prototype library  provides some functions and classes which effectively
+change the basic syntax of the JavaScript you write.</p>
+<dl>
+<dt><strong><a name="__element_" class="item">$(element)</a></strong></dt>
+
+<dd>
+<p>This function takes an element / element list and gets all string elements
+using document.getElementbyId. This is probably one of the most common
+functions when using javascript for web development, so it will save you
+a lot of typing.</p>
+</dd>
+<dt><strong><a name="class" class="item">Class</a></strong></dt>
+
+<dd>
+<p>This uses fucntion references to allow namespace-like Class structures
+in javascript.</p>
+</dd>
+<dt><strong><a name="object_extend" class="item">Object.extend</a></strong></dt>
+
+<dd>
+<p>Simple inheritance for javacsript. Will set all properties of the child
+in the parent.</p>
+</dd>
+<dt><strong><a name="function_bind" class="item">Function.bind</a></strong></dt>
+
+<dd>
+<p>Allow function refs to be full object method references, through the use
+of extend and apply</p>
+</dd>
+<dt><strong><a name="try_these" class="item">Try.these</a></strong></dt>
+
+<dd>
+<p>Simple try/catch for a list of functions, will return the return value
+of the first that doesn't throw an exception.</p>
+</dd>
+<dt><strong><a name="array_push" class="item">Array.push</a></strong></dt>
+
+<dd>
+<p>implement push for arrays. returns number of elements in result.</p>
+</dd>
+<dt><strong><a name="function_apply" class="item">Function.apply</a></strong></dt>
+
+<dd>
+<p>Call a function on a given object, using eval.</p>
+</dd>
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="js_objects">JS OBJECTS</a></h1>
+<p>The Prototype library provides a number of classes you can use
+to improve interaction with the end user.</p>
+<dl>
+<dt><strong><a name="ajax" class="item">Ajax</a></strong></dt>
+
+<dd>
+<p>Provides one useful function, getTransport. This function
+will return a XMLHttpRequest object suitable for your browser.</p>
+</dd>
+<dt><strong><a name="ajax_base" class="item">Ajax.Base</a></strong></dt>
+
+<dd>
+<p>An abstract base class for the Ajax objects described below. Sets
+some common options for Ajax objects;
+  <strong>method:</strong> http method, defaults to post.
+  <strong>asynchronous:</strong> process in the background, true/false, defaults to true.
+  <strong>parameters:</strong> extra parameters, defaults to blank.</p>
+</dd>
+<dt><strong><a name="ajax_updater" class="item">Ajax.Updater</a></strong></dt>
+
+<dd>
+<p>a subclass of Ajax.Base, this class uses Ajax.Request to populate
+a container in your web page. Takes container, url and Ajax.Base
+options as paramters.</p>
+</dd>
+<dt><strong><a name="ajax_request" class="item">Ajax.Request</a></strong></dt>
+
+<dd>
+<p>This object represents a plain ajax request. It extends base to
+add a constructor, as well as some events to handle events.
+The constructor takes  an url, as well as the options described
+in Ajax.Base.
+Currently handles the following events:
+  'Uninitialized', 'Loading', 'Loaded', 'Interactive', 'Complete'</p>
+</dd>
+<dt><strong><a name="effect_appear" class="item">Effect.Appear</a></strong></dt>
+
+<dd>
+<p>Takes an element, and makes that element appear through a fade.</p>
+</dd>
+<dt><strong><a name="effect_contentzoom" class="item">Effect.ContentZoom</a></strong></dt>
+
+<dd>
+<p>Takes an element, and zooms the content of that element.</p>
+</dd>
+<dt><strong><a name="effect_fade" class="item">Effect.Fade</a></strong></dt>
+
+<dd>
+<p>Takes an element, and makes that element fade out and disappear.</p>
+</dd>
+<dt><strong><a name="effect_highlight" class="item">Effect.Highlight</a></strong></dt>
+
+<dd>
+<p>Takes an element, and does a highlight of that element.</p>
+</dd>
+<dt><strong><a name="effect_puff" class="item">Effect.Puff</a></strong></dt>
+
+<dd>
+<p>Takes an element, and makes that element &quot;blow up&quot; and disappear.
+(As in disappear in a puff of smoke).</p>
+</dd>
+<dt><strong><a name="effect_scale" class="item">Effect.Scale</a></strong></dt>
+
+<dd>
+<p>Takes an element, and a size, in percent, and scales that element to
+the given size. If it's a div, the initial size will have to be given
+in EM. No such restrictions for pictures.</p>
+</dd>
+<dt><strong><a name="effect_squish" class="item">Effect.Squish</a></strong></dt>
+
+<dd>
+<p>Takes an element, and shrinks that element until it disappears.</p>
+</dd>
+<dt><strong><a name="element" class="item">Element</a></strong></dt>
+
+<dd>
+<p>A collection of functions related to basic elements. takes one or more elements.
+  <strong>toggle:</strong> Toggles the element display style.
+  <strong>hide:</strong> Turns off the element's display style.
+  <strong>show:</strong> Turns on the element's display style.
+  <strong>remove:</strong> Delete this element from the DOM.
+  <strong>getHeight:</strong> Get the element height.</p>
+<p>Also provides a convenience object, Toggle, with one method display which aliases to toggle,
+so you can call it as
+  Toggle.display(element)</p>
+</dd>
+<dt><strong><a name="field" class="item">Field</a></strong></dt>
+
+<dd>
+<p>Adds some useful functions to HTML Fields with several elements:
+  <strong>clear:</strong> remove all content.
+  <strong>focus:</strong> Give the element focus.
+  <strong>present:</strong> returns true if all arguments are filled in, false otherwise.
+  <strong>select(element):</strong> Select the given element in a form.
+  <strong>activate(element):</strong> give the selected element focus, and select it.</p>
+</dd>
+<dt><strong><a name="form" class="item">Form</a></strong></dt>
+
+<dd>
+<p>Some useful utilies for HTML Forms. all of these take a form element
+as sole argument.
+  <strong>serialize:</strong> returns a URL serialized version of a given form.
+  <strong>getElements:</strong> returns all elements in the form.
+  <strong>disable:</strong> blurs and disables every element in the form.
+  <strong>focusFirstElement:</strong> Give first element in the form focus.
+  <strong>reset:</strong> reset all form elements.</p>
+</dd>
+<dt><strong><a name="form_element" class="item">Form.Element</a></strong></dt>
+
+<dd>
+<p>Some useful objects for Form Field Elements. These take an element
+as the sole argument.
+  <strong>serialize:</strong> url encode the element for use in a URI string.
+  <strong>getValue:</strong> returns the value of the given element.</p>
+</dd>
+<dt><strong><a name="form_element_observer" class="item">Form.Element.Observer</a></strong></dt>
+
+<dt><strong><a name="form_element_serializers" class="item">Form.Element.Serializers</a></strong></dt>
+
+<dd>
+<p>Serializers for various element types. Takes the input element as
+argument.
+  <strong>input:</strong> determines the element type, and chooses the right serializer.
+  <strong>inputSelector:</strong> serialize checkbox/radio.</p>
+</dd>
+<dt><strong><a name="form_element_observer2" class="item">Form.Element.Observer</a></strong></dt>
+
+<dt><strong><a name="insertion" class="item">Insertion</a></strong></dt>
+
+<dd>
+<p>This can be used in place of a innerHTML, to insert the content into
+the dom.</p>
+</dd>
+<dt><strong><a name="insertion_before" class="item">Insertion.Before</a></strong></dt>
+
+<dd>
+<p>Puts content before a given dom node.</p>
+</dd>
+<dt><strong><a name="insertion_top" class="item">Insertion.Top</a></strong></dt>
+
+<dd>
+<p>Puts content at the top of a given dom node.</p>
+</dd>
+<dt><strong><a name="insertion_bottom" class="item">Insertion.Bottom</a></strong></dt>
+
+<dd>
+<p>Puts content at the bottom of a given dom node.</p>
+</dd>
+<dt><strong><a name="insertion_after" class="item">Insertion.After</a></strong></dt>
+
+<dd>
+<p>Puts content after a given dom node.</p>
+</dd>
+<dt><strong><a name="periodicalexecuter" class="item">PeriodicalExecuter</a></strong></dt>
+
+<dd>
+<p>This object takes two parameters, a reference to a callback
+function, and a frequency in seconds. It will execute the callback
+every &lt;frequency&gt; second.</p>
+</dd>
+</dl>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../..//home/lithron/.cpan/build/HTML-Prototype-1.48-BysgwA/blib/lib/HTML/Prototype.html">the HTML::Prototype manpage</a>, <a href="../../Catalyst/Plugin/Prototype.html">the Catalyst::Plugin::Prototype manpage</a>
+<a href="http://prototype.conio.net/">http://prototype.conio.net/</a></p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Sebastian Riedel, <code>sri@oook.de</code>
+Marcus Ramberg, <code>mramberg@cpan.org</code></p>
+<p>Built around Prototype by Sam Stephenson.
+Much code is ported from Ruby on Rails javascript helpers.</p>
+<p>
+<a href="#__index__"><small>Back to Top</small></a>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>This library is free software. You can redistribute it and/or modify it under
+the same terms as perl itself.</p>
+<p><a href="#__index__"><small>Back to Top</small></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Prototype::Js - prototype library, embedded in perl</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>
